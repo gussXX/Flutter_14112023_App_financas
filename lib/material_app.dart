@@ -12,7 +12,7 @@ class Home extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
         useMaterial3: true,
       ),
-      home: const HomeApp(pageTitle: 'name'),
+      home: const HomeApp(pageTitle: 'name2'),
     );
   }
 }
