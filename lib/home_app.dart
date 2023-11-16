@@ -8,10 +8,10 @@ class HomeApp extends StatefulWidget {
   State<HomeApp> createState() => _HomeAppState();
 }
 
-class _HomeAppState extends State<HomeApp>  with WidgetsBindingObserver{
-
+class _HomeAppState extends State<HomeApp> with WidgetsBindingObserver {
   @override
   void initState() {
+    print(ThemeMode.system.index);
     super.initState();
   }
 
@@ -20,15 +20,17 @@ class _HomeAppState extends State<HomeApp>  with WidgetsBindingObserver{
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.pageTitle),
-        backgroundColor: Colors.black,
+        title: Text(widget.pageTitle,
+            style: Theme.of(context).textTheme.bodyLarge),
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      body: const Center(child: Text('Value'),),
+      body: const Center(
+        child: Text('Value'),
+      ),
     );
   }
 }

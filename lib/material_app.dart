@@ -1,4 +1,5 @@
 import 'package:financas/home_app.dart';
+import 'package:financas/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatelessWidget {
@@ -7,11 +8,9 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
-        useMaterial3: true,
-      ),
+      theme: Tema().lightMode(),
+      darkTheme: Tema().darkMode(),
+      themeMode: ThemeMode.system,
       home: const HomeApp(pageTitle: 'name2'),
     );
   }
