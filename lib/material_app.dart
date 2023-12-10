@@ -12,7 +12,7 @@ class Home extends StatelessWidget {
       theme: Tema().lightMode(),
       darkTheme: Tema().darkMode(),
       themeMode: ThemeMode.system,
-      home: HomeApp(pageTitle: 'name2'),
+      home: const HomeApp(pageTitle: 'name2'),
     );
   }
 }

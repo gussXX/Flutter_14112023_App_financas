@@ -1,7 +1,9 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, unused_import
 
 import 'package:financas/mobX/app_state.dart';
+import 'package:financas/pages/home/body.dart';
 import 'package:financas/pages/home/float_Button.dart';
+import 'package:financas/pages/home/sliver_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:financas/pages/home/appbar.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -18,6 +20,8 @@ class _HomeAppState extends State<HomeApp> with WidgetsBindingObserver {
   final app_state = AppState();
   final floatButton = FloatButton();
   final appbar = ThisppBar();
+  final body = AppBody();
+  final sliverappBar = ThisSliverAppbar();
 
   @override
   void initState() {
@@ -32,16 +36,9 @@ class _HomeAppState extends State<HomeApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: floatButton.floatingActionButton(
-          action: app_state.increment, colors: Colors.red),
+      floatingActionButton: floatButton.floatingActionButton(action: app_state.increment, context: context),
       appBar: appbar.thisAppBar(context: context, pagetitle: widget.pageTitle),
-      body: Center(
-        child: Observer(
-          builder: (_) {
-            return Text('Valor = ${app_state.value}');
-          },
-        ),
-      ),
+      body: body.singleChildScrollView(app_state: app_state),
     );
   }
 }

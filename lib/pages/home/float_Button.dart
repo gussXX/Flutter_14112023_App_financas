@@ -1,21 +1,23 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart'
-    show Color, FloatingActionButton, VoidCallback;
+    show FloatingActionButton, Theme, VoidCallback;
+import 'package:flutter/widgets.dart';
 
 //const Color(0xff325D55)
 
 class FloatButton {
   Function? action;
-  Color? colors;
+  BuildContext? context;
 
   FloatingActionButton floatingActionButton({
     required VoidCallback action,
-    required Color colors,
+    required BuildContext context,
   }) {
     this.action = action;
-    this.colors = colors;
 
     return FloatingActionButton(
-      backgroundColor: colors,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       onPressed: action,
     );
   }

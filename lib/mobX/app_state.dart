@@ -5,7 +5,7 @@ class AppState = AppStateBase with _$AppState;
 
 abstract class AppStateBase with Store {
   @observable
-  int value = 1;
+  int value = 1984;
 
   @action
   void increment() {
