@@ -12,7 +12,12 @@ class Home extends StatelessWidget {
       theme: Tema().lightMode(),
       darkTheme: Tema().darkMode(),
       themeMode: ThemeMode.system,
-      home: HomeApp(pageTitle: 'App de Finanças', colors: Theme.of(context).colorScheme.background),
+      home: HomeApp(
+        pageTitle: 'App de finanças', 
+        ),
     );
   }
 }
+
+
+//Theme.of(context).primaryColor

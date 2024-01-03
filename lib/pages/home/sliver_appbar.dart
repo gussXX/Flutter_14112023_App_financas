@@ -17,7 +17,7 @@ class ThisSliverAppbar {
   AppState? appstate;
   String? title;
   ScrollController? scrollController;
-  Color? color;
+  double? percent;
   double? expandedHeight;
 
   CustomScrollView custonScrollView({
@@ -25,7 +25,8 @@ class ThisSliverAppbar {
     required AppState appstate,
     required String title,
     required ScrollController scrollController,
-    required Color color,
+
+    required double percent,
     required double expandedHeight
     
   }) {
@@ -42,7 +43,12 @@ class ThisSliverAppbar {
           snap: true,
 
           shadowColor: Colors.transparent,
-          backgroundColor: color,
+          backgroundColor: percent <= 1.0
+            ? Color.lerp(
+              Theme.of(context).colorScheme.background, 
+              Theme.of(context).colorScheme.primary, 
+              percent) as Color
+            : Theme.of(context).colorScheme.primary,
 
           flexibleSpace: FlexibleSpaceBar(
             title: Text(
