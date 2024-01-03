@@ -8,9 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:financas/pages/home/appbar.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
+      //appBar: appbar.thisAppBar(context: context, pagetitle: widget.pageTitle),
+      //body: body.singleChildScrollView(app_state: app_state),
+
 class HomeApp extends StatefulWidget {
-  const HomeApp({super.key, required this.pageTitle});
+  const HomeApp({super.key, required this.pageTitle, required this.colors});
   final String pageTitle;
+  final Color colors;
 
   @override
   State<HomeApp> createState() => _HomeAppState();
@@ -26,24 +30,29 @@ class _HomeAppState extends State<HomeApp> with WidgetsBindingObserver {
   final body = AppBody();
   final sliverappBar = ThisSliverAppbar();
 
- Color color= Color.fromARGB(255, 0, 139, 253);
+  double sliver_appbar_size = 120;
+  Color color = widget.colors;
 
   @override
   void initState() {
+
     super.initState();
     scrollController = ScrollController()
     ..addListener(() {
-      print(scrollController.offset);
 
       var initial = 0;
       var end = 62;
-      var percent = end/scrollController.offset;
+      double percent = scrollController.offset/sliver_appbar_size;
+
+      print(percent);
 
       setState(() {
-        color = Color.lerp(
-          Color.fromARGB(255, 0, 139, 253), 
-          Color.fromARGB(255, 253, 0, 0), 
-          percent) as Color;
+        color = percent <= 1.0
+        ? Color.lerp(
+          Theme.of(context).colorScheme.background, 
+          Theme.of(context).colorScheme.primary, 
+          percent) as Color
+        : Theme.of(context).colorScheme.primary;
       });
     });
   }
@@ -57,9 +66,8 @@ class _HomeAppState extends State<HomeApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: floatButton.floatingActionButton(action: app_state.increment, context: context),
-      //appBar: appbar.thisAppBar(context: context, pagetitle: widget.pageTitle),
-      //body: body.singleChildScrollView(app_state: app_state),
       body: sliverappBar.custonScrollView(
+        expandedHeight: sliver_appbar_size,
         color: color,
         scrollController: scrollController,
         context: context,

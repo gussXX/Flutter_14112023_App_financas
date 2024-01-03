@@ -4,20 +4,29 @@ import 'package:financas/mobX/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
+// MaterialStateColor.resolveWith((Set<MaterialState> states) {
+//             if (states.contains(MaterialState.selected)) {
+//               return Colors.red;
+//             }else{
+//               return Colors.black;
+//             }
+//           })
+
 class ThisSliverAppbar {
   Function? context;
   AppState? appstate;
   String? title;
   ScrollController? scrollController;
-
   Color? color;
+  double? expandedHeight;
 
   CustomScrollView custonScrollView({
     required BuildContext context,
     required AppState appstate,
     required String title,
     required ScrollController scrollController,
-    required Color color
+    required Color color,
+    required double expandedHeight
     
   }) {
     return CustomScrollView(
@@ -25,7 +34,7 @@ class ThisSliverAppbar {
       slivers: [
         SliverAppBar(
 
-          expandedHeight: 120,
+          expandedHeight: expandedHeight,
           elevation: 0,
 
           pinned: true,
