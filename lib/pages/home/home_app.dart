@@ -3,6 +3,7 @@
 import 'package:financas/mobX/app_state.dart';
 import 'package:financas/pages/home/body.dart';
 import 'package:financas/pages/home/float_Button.dart';
+import 'package:financas/pages/home/rules/lists.dart';
 import 'package:financas/pages/home/sliver_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:financas/pages/home/appbar.dart';
@@ -31,9 +32,11 @@ class _HomeAppState extends State<HomeApp>
   final appbar = ThisppBar();
   final body = AppBody();
   final sliverappBar = ThisSliverAppbar();
+  final list = ListValues();
 
   double sliver_appbar_size = 300;
   double finalPercent = 0;
+  
 
   @override
   void initState() {
@@ -65,6 +68,7 @@ class _HomeAppState extends State<HomeApp>
 
   @override
   Widget build(BuildContext context) {
+
     return Observer(builder: (context) {
       return Scaffold(
         floatingActionButton: floatButton.floatingActionButton(
@@ -75,7 +79,9 @@ class _HomeAppState extends State<HomeApp>
             scrollController: scrollController,
             context: context,
             appstate: app_state,
-            title: widget.pageTitle),
+            title: widget.pageTitle,
+            listFinal: list.listValues(context: context)
+            ),
       );
     });
   }

@@ -1,6 +1,9 @@
-// ignore_for_file: avoid_print, prefer_const_constructors, unused_local_variable
+// ignore_for_file: avoid_print, prefer_const_constructors, unused_local_variable, unnecessary_string_interpolations
 
 import 'package:financas/mobX/app_state.dart';
+import 'package:financas/pages/home/chart.dart';
+import 'package:financas/pages/home/rules/lists.dart';
+import 'package:financas/pages/home/rules/rules.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -11,6 +14,7 @@ class ThisSliverAppbar {
   ScrollController? scrollController;
   double? percent;
   double? expandedHeight;
+  Widget? listFinal;
 
   CustomScrollView custonScrollView({
     required BuildContext context,
@@ -19,10 +23,16 @@ class ThisSliverAppbar {
     required ScrollController scrollController,
     required double percent,
     required double expandedHeight,
-  }) 
-  
-  {
+    required Widget listFinal
+  }) {
     Brightness currentBrightness = MediaQuery.of(context).platformBrightness;
+
+    final charthome = ChartHome();
+    final rules = Rules();
+    final listValues = ListValues();
+
+    ScrollController listScrollController = ScrollController();
+    print('Re-build!');
 
     return CustomScrollView(
       controller: scrollController,
@@ -67,11 +77,7 @@ class ThisSliverAppbar {
                               ),
                               Icon(Icons.keyboard_arrow_right_outlined,
                                   size: 30,
-                                  color: currentBrightness == Brightness.dark
-                                      ? Colors.white
-                                      : appstate.percent > 0.5
-                                          ? Colors.white
-                                          : const Color(0xff325D55))
+                                  color: rules.iconColors(currentBrightness, appstate.percent))
                             ],
                           ),
                         ),
@@ -115,34 +121,17 @@ class ThisSliverAppbar {
           ),
           actions: [
             IconButton(
-                onPressed: () {
-                  print(scrollController.offset);
-                  print(scrollController.offset / expandedHeight);
-                },
+                onPressed: () {},
                 icon: const Icon(Icons.remove_red_eye_outlined),
-                color: currentBrightness == Brightness.dark
-                    ? Colors.white
-                    : appstate.percent > 0.5
-                        ? Colors.white
-                        : const Color(0xff325D55)),
+                color: rules.iconColors(currentBrightness, appstate.percent)),
             IconButton(
-                onPressed: () {
-                  print('');
-                },
+                onPressed: () {},
                 icon: const Icon(Icons.flag_outlined),
-                color: currentBrightness == Brightness.dark
-                    ? Colors.white
-                    : appstate.percent > 0.5
-                        ? Colors.white
-                        : const Color(0xff325D55)),
+                color: rules.iconColors(currentBrightness, appstate.percent)),
             IconButton(
                 onPressed: () {},
                 icon: const Icon(Icons.person),
-                color: currentBrightness == Brightness.dark
-                    ? Colors.white
-                    : appstate.percent > 0.5
-                        ? Colors.white
-                        : const Color(0xff325D55))
+                color: rules.iconColors(currentBrightness, appstate.percent))
           ],
         ),
         SliverList(
@@ -170,7 +159,7 @@ class ThisSliverAppbar {
                               alignment: Alignment.center,
                               elevation: MaterialStatePropertyAll(0),
                               backgroundColor: MaterialStatePropertyAll(
-                                Color(0xffD9D9D9),
+                                Theme.of(context).colorScheme.onPrimary,
                               ),
                             ),
                             child: Text('12/Fev | 20/Mar',
@@ -181,7 +170,18 @@ class ThisSliverAppbar {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
                     child: Divider(
-                      color: Color(0xffD9D9D9),
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      height: 2,
+                    ),
+                  ),
+                  SizedBox(
+                      height: 200,
+                      child: charthome.barchat(
+                          maxSize: 100, entrada: 5000.00, saida: 2000.00)),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                    child: Divider(
+                      color: Theme.of(context).colorScheme.onPrimary,
                       height: 2,
                     ),
                   ),
@@ -193,12 +193,29 @@ class ThisSliverAppbar {
                   Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Container(
-                        height: 1900,
+                        height: 50,
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.onBackground,
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                         )),
+                  ),
+                  SizedBox(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: 5,
+                        controller: listScrollController,
+                        itemBuilder: (context, index) {
+                        return listFinal;
+                      },),
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    decoration: BoxDecoration(color: Colors.red),
                   )
                 ],
               ),
@@ -208,4 +225,5 @@ class ThisSliverAppbar {
       ],
     );
   }
+  
 }

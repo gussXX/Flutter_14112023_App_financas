@@ -31,6 +31,9 @@ class Tema {
           primary: const Color(0xff325D55),
           secondary: const Color.fromARGB(255, 243, 243, 243),
           tertiary: const Color(0xff77A49B),
+
+          onPrimary: const Color(0xffD9D9D9),
+
           seedColor: Colors.purple.shade100,
           background: Colors.grey.shade100,
           onBackground: Colors.white,
@@ -78,6 +81,9 @@ class Tema {
           primary: const Color(0xff325D55),
           secondary: const Color.fromARGB(255, 243, 243, 243),
           tertiary: const Color(0xff77A49B),
+
+          onPrimary: const Color.fromARGB(255, 105, 105, 105),
+
           seedColor: Colors.deepPurpleAccent,
           background: const Color(0xff262626),
           onBackground: const Color.fromARGB(157, 49, 49, 49),

@@ -5,55 +5,59 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // Estilo para o ElevatedButton
-  final ButtonStyle elevatedButtonStyle = ElevatedButton.styleFrom(
-    primary: Colors.blue,
-    onPrimary: Colors.white,
-    textStyle: TextStyle(fontSize: 18),
-    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(8),
-    ),
-  );
-
-  // Estilo para o TextButton
-  final ButtonStyle textButtonStyle = TextButton.styleFrom(
-    foregroundColor: Colors.red,
-    textStyle: const TextStyle(fontSize: 16),
-    padding: const EdgeInsets.all(15),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(8),
-      side: const BorderSide(
-          color: Colors.red), // Adicionando borda ao TextButton
-    ),
-  );
+  final List<String> emails = [
+    'exemplo@email.com',
+    'outro@email.com',
+    'maisum@email.com',
+    // ...outros emails
+  ];
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: Text('Estilos para Botões')),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  // Ação ao pressionar o ElevatedButton
-                },
-                style: elevatedButtonStyle,
-                child: Text('ElevatedButton'),
+        appBar: AppBar(
+          title: const Text('Lista de Emails'),
+        ),
+        body: ListView.builder(
+          itemCount: emails.length,
+          itemBuilder: (context, index) {
+            return Dismissible(
+              key: UniqueKey(),
+              direction: DismissDirection.horizontal,
+              background: Container(
+                color: Colors.red,
+                alignment: Alignment.centerLeft,
+                child: const Icon(Icons.delete),
               ),
-              SizedBox(height: 20),
-              TextButton(
-                onPressed: () {
-                  // Ação ao pressionar o TextButton
-                },
-                style: textButtonStyle,
-                child: Text('TextButton'),
+              secondaryBackground: Container(
+                color: Colors.green,
+                alignment: Alignment.centerRight,
+                child: const Icon(Icons.archive),
               ),
-            ],
-          ),
+              child: Card(
+                child: ListTile(
+                  leading: const CircleAvatar(
+                    child: Text('View'),
+                  ),
+                  title: Text(emails[index]),
+                  subtitle: const Text('Assunto do email'),
+                  trailing: const Icon(Icons.star_border),
+                  onTap: () {
+                    // Ação ao clicar no email
+                  },
+                ),
+              ),
+              onDismissed: (direction) {
+                // Ação ao arrastar para o lado (esquerda ou direita)
+                if (direction == DismissDirection.startToEnd) {
+                  // Ação ao arrastar para a direita (arquivar, por exemplo)
+                } else if (direction == DismissDirection.endToStart) {
+                  // Ação ao arrastar para a esquerda (excluir, por exemplo)
+                }
+              },
+            );
+          },
         ),
       ),
     );
