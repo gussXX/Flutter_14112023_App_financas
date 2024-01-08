@@ -8,11 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:financas/pages/home/appbar.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
-      //appBar: appbar.thisAppBar(context: context, pagetitle: widget.pageTitle),
-      //body: body.singleChildScrollView(app_state: app_state),
+//appBar: appbar.thisAppBar(context: context, pagetitle: widget.pageTitle),
+//body: body.singleChildScrollView(app_state: app_state),
 
 class HomeApp extends StatefulWidget {
-
   HomeApp({super.key, required this.pageTitle});
 
   String pageTitle;
@@ -22,9 +21,10 @@ class HomeApp extends StatefulWidget {
   }
 }
 
-class _HomeAppState extends State<HomeApp> with WidgetsBindingObserver {
-
+class _HomeAppState extends State<HomeApp>
+    with WidgetsBindingObserver, TickerProviderStateMixin {
   late ScrollController scrollController;
+  late AnimationController animationController;
 
   final app_state = AppState();
   final floatButton = FloatButton();
@@ -32,44 +32,51 @@ class _HomeAppState extends State<HomeApp> with WidgetsBindingObserver {
   final body = AppBody();
   final sliverappBar = ThisSliverAppbar();
 
-  double sliver_appbar_size = 120;
+  double sliver_appbar_size = 300;
   double finalPercent = 0;
 
   @override
   void initState() {
-
     super.initState();
 
+    animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 5));
+    animationController.forward();
+
     scrollController = ScrollController()
-    ..addListener(() {
+      ..addListener(() {
+        //print(scrollController.offset);
+        //print(animationController.value);
+        //print(app_state.percent);
 
-      var initial = 0;
-      var end = 62;
-      double percent = scrollController.offset/sliver_appbar_size;
-
-      setState(() {
-        finalPercent = percent;
+        var initial = 0;
+        var end = 62;
+        double percent = (scrollController.offset) / (sliver_appbar_size - 70);
+        app_state.percent = percent;
       });
-    });
   }
 
   @override
   void dispose() {
+    scrollController.dispose();
+    animationController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
-    return Scaffold(
-      floatingActionButton: floatButton.floatingActionButton(action: app_state.increment, context: context),
-      body: sliverappBar.custonScrollView(
-        expandedHeight: sliver_appbar_size,
-        percent: finalPercent,
-        scrollController: scrollController,
-        context: context,
-        appstate: app_state, 
-        title: widget.pageTitle),
-    );
+    return Observer(builder: (context) {
+      return Scaffold(
+        floatingActionButton: floatButton.floatingActionButton(
+            action: app_state.increment, context: context),
+        body: sliverappBar.custonScrollView(
+            expandedHeight: sliver_appbar_size,
+            percent: app_state.percent,
+            scrollController: scrollController,
+            context: context,
+            appstate: app_state,
+            title: widget.pageTitle),
+      );
+    });
   }
 }

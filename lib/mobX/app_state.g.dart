@@ -24,6 +24,22 @@ mixin _$AppState on AppStateBase, Store {
     });
   }
 
+  late final _$percentAtom =
+      Atom(name: 'AppStateBase.percent', context: context);
+
+  @override
+  double get percent {
+    _$percentAtom.reportRead();
+    return super.percent;
+  }
+
+  @override
+  set percent(double value) {
+    _$percentAtom.reportWrite(value, super.percent, () {
+      super.percent = value;
+    });
+  }
+
   late final _$AppStateBaseActionController =
       ActionController(name: 'AppStateBase', context: context);
 
@@ -41,7 +57,8 @@ mixin _$AppState on AppStateBase, Store {
   @override
   String toString() {
     return '''
-value: ${value}
+value: ${value},
+percent: ${percent}
     ''';
   }
 }

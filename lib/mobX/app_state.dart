@@ -7,6 +7,9 @@ abstract class AppStateBase with Store {
   @observable
   int value = 0;
 
+  @observable
+  double percent = 0;
+
   @action
   void increment() {
     value++;
