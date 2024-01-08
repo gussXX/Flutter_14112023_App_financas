@@ -4,6 +4,7 @@ import 'package:financas/mobX/app_state.dart';
 import 'package:financas/pages/home/body.dart';
 import 'package:financas/pages/home/float_Button.dart';
 import 'package:financas/pages/home/rules/lists.dart';
+import 'package:financas/pages/home/sliverAppBar.dart';
 import 'package:financas/pages/home/sliver_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:financas/pages/home/appbar.dart';
@@ -73,15 +74,22 @@ class _HomeAppState extends State<HomeApp>
       return Scaffold(
         floatingActionButton: floatButton.floatingActionButton(
             action: app_state.increment, context: context),
-        body: sliverappBar.custonScrollView(
+        // body: sliverappBar.custonScrollView(
+        //   expandedHeight: sliver_appbar_size,
+        //   percent: app_state.percent,
+        //   scrollController: scrollController,
+        //   context: context,
+        //   appstate: app_state,
+        // title: widget.pageTitle,
+        //     ),
+        body: SliverAppBarApp(
             expandedHeight: sliver_appbar_size,
             percent: app_state.percent,
             scrollController: scrollController,
             context: context,
             appstate: app_state,
-            title: widget.pageTitle,
-            listFinal: list.listValues(context: context)
-            ),
+          title: widget.pageTitle,
+        ),
       );
     });
   }
