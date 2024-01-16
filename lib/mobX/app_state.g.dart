@@ -40,6 +40,22 @@ mixin _$AppState on AppStateBase, Store {
     });
   }
 
+  late final _$chartLoadingStateAtom =
+      Atom(name: 'AppStateBase.chartLoadingState', context: context);
+
+  @override
+  bool get chartLoadingState {
+    _$chartLoadingStateAtom.reportRead();
+    return super.chartLoadingState;
+  }
+
+  @override
+  set chartLoadingState(bool value) {
+    _$chartLoadingStateAtom.reportWrite(value, super.chartLoadingState, () {
+      super.chartLoadingState = value;
+    });
+  }
+
   late final _$AppStateBaseActionController =
       ActionController(name: 'AppStateBase', context: context);
 
@@ -55,10 +71,22 @@ mixin _$AppState on AppStateBase, Store {
   }
 
   @override
+  void changeChartLoadingState() {
+    final _$actionInfo = _$AppStateBaseActionController.startAction(
+        name: 'AppStateBase.changeChartLoadingState');
+    try {
+      return super.changeChartLoadingState();
+    } finally {
+      _$AppStateBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 value: ${value},
-percent: ${percent}
+percent: ${percent},
+chartLoadingState: ${chartLoadingState}
     ''';
   }
 }

@@ -1,27 +1,63 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations, unused_local_variable, unused_element, unnecessary_brace_in_string_interps
+// ignore_for_file: file_names, must_be_immutable, unnecessary_string_interpolations, no_logic_in_create_state, avoid_print, sized_box_for_whitespace, unused_local_variable, unused_import
 
+import 'package:financas/mobX/app_state.dart';
 import 'package:financas/pages/home/rules/rules.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 
+class ChartBuilder extends StatefulWidget {
+  double maxSize;
+  double entrada;
+  double saida;
+  bool building;
+  AppState appstate;
 
-class ChartHome {
-  double? maxSize;
-  double? entrada;
-  double? saida;
+  ChartBuilder({
+    super.key,
+    required this.maxSize,
+    required this.entrada,
+    required this.saida,
+    required this.building,
+    required this.appstate,
+  });
 
-  BarChart barchat(
-      {required double maxSize,
-      required double entrada,
-      required double saida}) {
+  @override
+  State<ChartBuilder> createState() {
+    print('CHART CRIADO');
+    return _ChartBuilderState();
+  }
+}
 
-    final rules = Rules();
-    final formatoMoeda = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
-    
+class _ChartBuilderState extends State<ChartBuilder> {
+  //
+  @override
+  void initState() {
+    print('CHART INICIADO');
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  final rules = Rules();
+  final formatoMoeda = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
+
+  @override
+  Widget build(BuildContext context) {
+    print('CHART CONSTRUIDO');
+
+    double maxSize = widget.maxSize;
+    double entrada = widget.entrada;
+    double saida = widget.saida;
+    AppState appState = widget.appstate;
+
     return BarChart(
       BarChartData(
-        gridData: FlGridData(
+        gridData: const FlGridData(
           drawHorizontalLine: false,
           drawVerticalLine: false,
         ),
@@ -49,19 +85,19 @@ class ChartHome {
                       case 0:
                         return Text(
                           '${formatoMoeda.format(entrada)}',
-                          style: TextStyle(color: Colors.green),
+                          style: const TextStyle(color: Colors.green),
                         );
                       case 1:
                         return Text(
                           '${formatoMoeda.format(saida)}',
-                          style: TextStyle(color: Colors.red),
+                          style: const TextStyle(color: Colors.red),
                         );
                       default:
                         return Text(meta.toString());
                     }
                   },
                 )),
-            leftTitles: AxisTitles(drawBelowEverything: false),
+            leftTitles: const AxisTitles(drawBelowEverything: false),
             bottomTitles: AxisTitles(
               drawBelowEverything: true,
               sideTitles: SideTitles(
@@ -69,12 +105,12 @@ class ChartHome {
                 getTitlesWidget: (value, meta) {
                   switch (value.toInt()) {
                     case 0:
-                      return Text(
+                      return const Text(
                         'Entradas',
                         style: TextStyle(color: Colors.green),
                       );
                     case 1:
-                      return Text(
+                      return const Text(
                         'Saídas',
                         style: TextStyle(color: Colors.red),
                       );
@@ -84,7 +120,7 @@ class ChartHome {
                 },
               ),
             ),
-            rightTitles: AxisTitles(drawBelowEverything: false)),
+            rightTitles: const AxisTitles(drawBelowEverything: false)),
         borderData: FlBorderData(show: false),
         barGroups: [
           BarChartGroupData(
