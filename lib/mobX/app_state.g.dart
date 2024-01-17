@@ -82,6 +82,17 @@ mixin _$AppState on AppStateBase, Store {
   }
 
   @override
+  void resetChartLoadingState(dynamic value) {
+    final _$actionInfo = _$AppStateBaseActionController.startAction(
+        name: 'AppStateBase.resetChartLoadingState');
+    try {
+      return super.resetChartLoadingState(value);
+    } finally {
+      _$AppStateBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 value: ${value},

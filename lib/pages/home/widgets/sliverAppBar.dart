@@ -2,11 +2,13 @@
 import 'dart:math';
 
 import 'package:financas/mobX/app_state.dart';
+import 'package:financas/pages/home/build/barBuilder.dart';
 import 'package:financas/pages/home/build/chartBuilder.dart';
 import 'package:financas/pages/home/rules/rules.dart';
 import 'package:financas/pages/home/build/listBuilder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:intl/intl.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class SliverAppBarApp extends StatefulWidget {
@@ -36,26 +38,31 @@ class SliverAppBarApp extends StatefulWidget {
 
 class _SliverAppBarAppState extends State<SliverAppBarApp> {
   //
-  late Future<void> _dataInitialization;
-  late double a;
-  late double b;
+  late Future<void> _getChartValues;
+  late Map<String, double> es;
+  late double randomValue;
 
-  Future<void> fetchData() async {
+  Future<void> getChartValues() async {
+
+    double randoA = Random().nextDouble() * 10000;
+    double randoB = Random().nextDouble() * 10000;
     print('fetch Data!');
+
     if (widget.appstate.chartLoadingState == true) {
       await Future.delayed(const Duration(seconds: 5));
       //
-      a = 50;
-      b = 200;
-      widget.appstate.changeChartLoadingState();
+      es = {'Entrada': randoA, 'Saida': randoB};
+    widget.appstate.changeChartLoadingState();
     }
   }
 
   @override
   void initState() {
     print('SLIVERAPP BAR INICIADO');
+    randomValue = Random().nextDouble() * 10000;
     super.initState();
-    _dataInitialization = fetchData();
+    _getChartValues = getChartValues();
+  
   }
 
   @override
@@ -76,7 +83,9 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
     double expandedHeight = widget.expandedHeight;
 
     Brightness currentBrightness = MediaQuery.of(context).platformBrightness;
+
     final rules = Rules();
+    final barBuilder = BarBuilder();
 
     return CustomScrollView(
       controller: widget.scrollController,
@@ -98,7 +107,7 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
           flexibleSpace: FlexibleSpaceBar(
             titlePadding: const EdgeInsets.only(top: 0, bottom: 20),
             title: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 400),
                 transitionBuilder: (Widget child, Animation<double> animation) {
                   return ScaleTransition(
                     scale:
@@ -107,71 +116,22 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                   );
                 },
                 child: appstate.percent > 0.5
-                    ? SizedBox(
-                        key: const ValueKey(1),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Olá, Gustavo!',
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                              Icon(Icons.keyboard_arrow_right_outlined,
-                                  size: 30,
-                                  color: rules.iconColors(
-                                      currentBrightness, appstate.percent))
-                            ],
-                          ),
-                        ),
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            key: const ValueKey(2),
-                            width: MediaQuery.of(context).size.width - 150,
-                            height: 150,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(20)),
-                              color: Theme.of(context).colorScheme.onBackground,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Seu saldo',
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
-                                  ),
-                                  Text(
-                                    "R\$ 20.000,00",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      )),
+                    ? barBuilder.collapsedBar(context: context, rules: rules, appstate: appstate)
+                    : barBuilder.expandedBar(context: context, rules: rules, appstate: appstate, randomValue: randomValue)),
             centerTitle: true,
           ),
           actions: [
-            IconButton(
-                onPressed: () async {
-                  appstate.changeChartLoadingState;
-                  await fetchData();
-                },
-                icon: const Icon(Icons.remove_red_eye_outlined),
-                color: rules.iconColors(currentBrightness, appstate.percent)),
+            Observer(
+              builder: (_) {
+                return IconButton(
+                    onPressed: () async {
+                      appstate.changeChartLoadingState();
+                      await getChartValues();
+                    },
+                    icon: const Icon(Icons.remove_red_eye_outlined),
+                    color: rules.iconColors(currentBrightness, appstate.percent));
+              }
+            ),
             IconButton(
                 onPressed: () {},
                 icon: const Icon(Icons.flag_outlined),
@@ -223,16 +183,16 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                     ),
                   ),
                   SizedBox(
-                      height: 200,
+                      height: 250,
                       child: Observer(
                         builder: (_) {
                           return Skeletonizer(
                               enabled: appstate.chartLoadingState,
-                              justifyMultiLineText: false,
+                              justifyMultiLineText: true,
                               ignoreContainers: true,
-                              ignorePointers: false,
+                              ignorePointers: true,
                               child: FutureBuilder(
-                                  future: _dataInitialization,
+                                  future: _getChartValues,
                                   builder: (contex, snapshot) {
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {
@@ -240,15 +200,15 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                                           appstate: appstate,
                                           building: appstate.chartLoadingState,
                                           maxSize: 100,
-                                          entrada: 100,
-                                          saida: 100);
+                                          entrada: 1,
+                                          saida: 1);
                                     } else {
                                       return ChartBuilder(
                                           appstate: appstate,
                                           building: appstate.chartLoadingState,
                                           maxSize: 100,
-                                          entrada: a,
-                                          saida: b);
+                                          entrada: es['Entrada']!,
+                                          saida: es['Saida']!);
                                     }
                                   }));
                         },

@@ -79,6 +79,7 @@ class _ChartBuilderState extends State<ChartBuilder> {
             topTitles: AxisTitles(
                 drawBelowEverything: true,
                 sideTitles: SideTitles(
+                  reservedSize: 40,
                   showTitles: true,
                   getTitlesWidget: (value, meta) {
                     switch (value.toInt()) {
@@ -101,6 +102,7 @@ class _ChartBuilderState extends State<ChartBuilder> {
             bottomTitles: AxisTitles(
               drawBelowEverything: true,
               sideTitles: SideTitles(
+                reservedSize: 40,
                 showTitles: true,
                 getTitlesWidget: (value, meta) {
                   switch (value.toInt()) {

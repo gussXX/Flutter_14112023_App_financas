@@ -20,4 +20,9 @@ abstract class AppStateBase with Store {
   void changeChartLoadingState() {
     chartLoadingState = !chartLoadingState;
   }
+
+  @action
+  void resetChartLoadingState(value){
+    !value;
+  }
 }

@@ -1,15 +1,11 @@
-// ignore_for_file: non_constant_identifier_names, unused_import, avoid_print, unnecessary_brace_in_string_interps, unused_local_variable, prefer_typing_uninitialized_variables, prefer_const_constructors, must_be_immutable
+// ignore_for_file: non_constant_identifier_names, unused_import, avoid_print, unnecessary_brace_in_string_interps, unused_local_variable, prefer_typing_uninitialized_variables, prefer_const_constructors, must_be_immutable, file_names
 
 import 'package:financas/mobX/app_state.dart';
 import 'package:financas/pages/home/widgets/floatButton.dart';
-import 'package:financas/pages/home/rules/lists.dart';
 import 'package:financas/pages/home/widgets/sliverAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:financas/pages/login/appbar.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-
-//appBar: appbar.thisAppBar(context: context, pagetitle: widget.pageTitle),
-//body: body.singleChildScrollView(app_state: app_state),
 
 class HomeApp extends StatefulWidget {
   HomeApp({super.key, required this.pageTitle});
