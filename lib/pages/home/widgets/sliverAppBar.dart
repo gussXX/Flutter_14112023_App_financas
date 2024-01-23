@@ -4,11 +4,12 @@ import 'dart:math';
 import 'package:financas/mobX/app_state.dart';
 import 'package:financas/pages/home/build/barBuilder.dart';
 import 'package:financas/pages/home/build/chartBuilder.dart';
-import 'package:financas/pages/home/rules/rules.dart';
 import 'package:financas/pages/home/build/listBuilder.dart';
+import 'package:financas/pages/home/rules/chartUpdate.dart';
+import 'package:financas/pages/home/rules/listUpdate.dart';
+import 'package:financas/pages/home/rules/rules.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:intl/intl.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class SliverAppBarApp extends StatefulWidget {
@@ -39,20 +40,34 @@ class SliverAppBarApp extends StatefulWidget {
 class _SliverAppBarAppState extends State<SliverAppBarApp> {
   //
   late Future<void> _getChartValues;
+  late Future<void> _getListValues;
+  //
   late Map<String, double> es;
+  late Map<String, double> esAPI;
   late double randomValue;
+  //
+  late List ls;
+  //
+  final listUpdate = ListUpdate();
+  final chartUpdate = ChartUpdate();
+
+  Future<void> getListValues() async {
+    await Future.delayed(const Duration(seconds: 5));
+    ls = await listUpdate.listUpdate();
+    widget.appstate.changeListLoadingState();
+  }
 
   Future<void> getChartValues() async {
-
     double randoA = Random().nextDouble() * 10000;
     double randoB = Random().nextDouble() * 10000;
-    print('fetch Data!');
+    print('Dados do GRAFICO recebidos');
 
     if (widget.appstate.chartLoadingState == true) {
       await Future.delayed(const Duration(seconds: 5));
       //
+      esAPI = await chartUpdate.chartUpdate();
       es = {'Entrada': randoA, 'Saida': randoB};
-    widget.appstate.changeChartLoadingState();
+      widget.appstate.changeChartLoadingState();
     }
   }
 
@@ -62,7 +77,7 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
     randomValue = Random().nextDouble() * 10000;
     super.initState();
     _getChartValues = getChartValues();
-  
+    _getListValues = getListValues();
   }
 
   @override
@@ -116,24 +131,34 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                   );
                 },
                 child: appstate.percent > 0.5
-                    ? barBuilder.collapsedBar(context: context, rules: rules, appstate: appstate)
-                    : barBuilder.expandedBar(context: context, rules: rules, appstate: appstate, randomValue: randomValue)),
+                    ? barBuilder.collapsedBar(
+                        context: context,
+                        rules: rules,
+                        appstate: appstate,
+                      )
+                    : barBuilder.expandedBar(
+                        context: context,
+                        rules: rules,
+                        appstate: appstate,
+                        randomValue: randomValue)),
             centerTitle: true,
           ),
           actions: [
-            Observer(
-              builder: (_) {
-                return IconButton(
-                    onPressed: () async {
-                      appstate.changeChartLoadingState();
-                      await getChartValues();
-                    },
-                    icon: const Icon(Icons.remove_red_eye_outlined),
-                    color: rules.iconColors(currentBrightness, appstate.percent));
-              }
-            ),
+            Observer(builder: (_) {
+              return IconButton(
+                  onPressed: () async {
+                    appstate.changeChartLoadingState();
+                    appstate.changeListLoadingState();
+                    getChartValues();
+                    getListValues();
+                  },
+                  icon: const Icon(Icons.remove_red_eye_outlined),
+                  color: rules.iconColors(currentBrightness, appstate.percent));
+            }),
             IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  chartUpdate.chartUpdate();
+                },
                 icon: const Icon(Icons.flag_outlined),
                 color: rules.iconColors(currentBrightness, appstate.percent)),
             IconButton(
@@ -199,6 +224,7 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                                       return ChartBuilder(
                                           appstate: appstate,
                                           building: appstate.chartLoadingState,
+                                          esAPI: esAPI,
                                           maxSize: 100,
                                           entrada: 1,
                                           saida: 1);
@@ -207,6 +233,7 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                                           appstate: appstate,
                                           building: appstate.chartLoadingState,
                                           maxSize: 100,
+                                          esAPI: esAPI,
                                           entrada: es['Entrada']!,
                                           saida: es['Saida']!);
                                     }
@@ -225,15 +252,39 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                       return Text('Valor = ${appstate.value}');
                     },
                   ),
-                  Skeletonizer(
-                    enabled: false,
-                    child: SizedBox(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: ListFinalBuilder(),
+                  Observer(builder: (_) {
+                    return Skeletonizer(
+                      enabled: appstate.listLoadingState,
+                      justifyMultiLineText: true,
+                      ignoreContainers: false,
+                      ignorePointers: true,
+                      child: FutureBuilder(
+                        future: _getListValues,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return SizedBox(
+                              child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: ListBuilder(
+                                    listSize: 0,
+                                    listValues: const [],
+                                  )),
+                            );
+                          } else {
+                            return SizedBox(
+                              child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: ListBuilder(
+                                    listSize: ls.length,
+                                    listValues: ls,
+                                  )),
+                            );
+                          }
+                        },
                       ),
-                    ),
-                  ),
+                    );
+                  }),
                 ],
               ),
             ),

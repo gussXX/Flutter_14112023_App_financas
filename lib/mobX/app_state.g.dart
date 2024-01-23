@@ -56,6 +56,22 @@ mixin _$AppState on AppStateBase, Store {
     });
   }
 
+  late final _$listLoadingStateAtom =
+      Atom(name: 'AppStateBase.listLoadingState', context: context);
+
+  @override
+  bool get listLoadingState {
+    _$listLoadingStateAtom.reportRead();
+    return super.listLoadingState;
+  }
+
+  @override
+  set listLoadingState(bool value) {
+    _$listLoadingStateAtom.reportWrite(value, super.listLoadingState, () {
+      super.listLoadingState = value;
+    });
+  }
+
   late final _$AppStateBaseActionController =
       ActionController(name: 'AppStateBase', context: context);
 
@@ -93,11 +109,34 @@ mixin _$AppState on AppStateBase, Store {
   }
 
   @override
+  void changeListLoadingState() {
+    final _$actionInfo = _$AppStateBaseActionController.startAction(
+        name: 'AppStateBase.changeListLoadingState');
+    try {
+      return super.changeListLoadingState();
+    } finally {
+      _$AppStateBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void resetListLoadingState(dynamic value) {
+    final _$actionInfo = _$AppStateBaseActionController.startAction(
+        name: 'AppStateBase.resetListLoadingState');
+    try {
+      return super.resetListLoadingState(value);
+    } finally {
+      _$AppStateBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 value: ${value},
 percent: ${percent},
-chartLoadingState: ${chartLoadingState}
+chartLoadingState: ${chartLoadingState},
+listLoadingState: ${listLoadingState}
     ''';
   }
 }
