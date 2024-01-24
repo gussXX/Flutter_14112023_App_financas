@@ -8,9 +8,10 @@ class ChartUpdate {
     // void chartUpdate() async {
     var client = http.Client();
     var myip = '192.168.18.25:9080';
+    var mypc = '192.168.11.101:9080';
     var route = 'somar_entrada_e_saida';
     //
-    var request = Uri.http(myip, route);
+    var request = Uri.http(mypc, route);
     var header = {"Content-Type": "application/json"};
     Map<String, double> myMap = {};
 
@@ -30,22 +31,26 @@ class ChartUpdate {
           headers: header,
         );
 
-        var decodedResponse =
-            jsonDecode(utf8.decode(response.bodyBytes)) as List;
+        var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as List;
 
-        for (var item in decodedResponse) {
-          myMap.putIfAbsent(element, () => item["total"]);
-          print('${element}: ${item["total"]}');
+        if (decodedResponse.isEmpty) {
+          myMap.putIfAbsent(element.toString(), () => 0);
+        } else {
+        
+          for (var item in decodedResponse) {
+            myMap.putIfAbsent(element, () {
+              return item["total"].toDouble();
+            });
+            print('${element}: ${item["total"]}');
+          }
         }
       }
-
-      print('-=========');
-      print(myMap);
-
+      print('MINHA MAP --> ${myMap}');
       return myMap;
+      //
     } catch (error) {
       print('Ocorreu um erro: ${error}');
-      return myMap;
+      return {'entrada': 0.0, 'saida': 0.0};
     } finally {
       client.close();
     }

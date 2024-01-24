@@ -43,10 +43,9 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
   late Future<void> _getListValues;
   //
   late Map<String, double> es;
-  late Map<String, double> esAPI;
-  late double randomValue;
-  //
   late List ls;
+  late double randomValue;
+
   //
   final listUpdate = ListUpdate();
   final chartUpdate = ChartUpdate();
@@ -58,15 +57,11 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
   }
 
   Future<void> getChartValues() async {
-    double randoA = Random().nextDouble() * 10000;
-    double randoB = Random().nextDouble() * 10000;
-    print('Dados do GRAFICO recebidos');
-
     if (widget.appstate.chartLoadingState == true) {
       await Future.delayed(const Duration(seconds: 5));
       //
-      esAPI = await chartUpdate.chartUpdate();
-      es = {'Entrada': randoA, 'Saida': randoB};
+      var response = await chartUpdate.chartUpdate();
+      es = {'Entrada': response['entrada']!, 'Saida': response['saida']!};
       widget.appstate.changeChartLoadingState();
     }
   }
@@ -76,8 +71,8 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
     print('SLIVERAPP BAR INICIADO');
     randomValue = Random().nextDouble() * 10000;
     super.initState();
-    _getChartValues = getChartValues();
     _getListValues = getListValues();
+    _getChartValues = getChartValues();
   }
 
   @override
@@ -224,7 +219,6 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                                       return ChartBuilder(
                                           appstate: appstate,
                                           building: appstate.chartLoadingState,
-                                          esAPI: esAPI,
                                           maxSize: 100,
                                           entrada: 1,
                                           saida: 1);
@@ -233,7 +227,6 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                                           appstate: appstate,
                                           building: appstate.chartLoadingState,
                                           maxSize: 100,
-                                          esAPI: esAPI,
                                           entrada: es['Entrada']!,
                                           saida: es['Saida']!);
                                     }
@@ -247,11 +240,11 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                       height: 2,
                     ),
                   ),
-                  Observer(
-                    builder: (_) {
-                      return Text('Valor = ${appstate.value}');
-                    },
-                  ),
+                  // Observer(
+                  //   builder: (_) {
+                  //     return Text('Valor = ${appstate.value}');
+                  //   },
+                  // ),
                   Observer(builder: (_) {
                     return Skeletonizer(
                       enabled: appstate.listLoadingState,
@@ -266,20 +259,52 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                             return SizedBox(
                               child: Padding(
                                   padding: EdgeInsets.all(8.0),
-                                  child: ListBuilder(
-                                    listSize: 0,
-                                    listValues: const [],
+                                  child: Card(
+                                    elevation: 0,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
+                                    child: ListTile(
+                                      leading: const Icon(
+                                            Icons.check,
+                                            color: Colors.green,
+                                            size: 30),
+                                      title: Text('',
+                                          style: const TextStyle(fontSize: 17)),
+                                      subtitle: Text(
+                                        '',
+                                        style: const TextStyle(fontSize: 14),
+                                      ),
+                                    ),
                                   )),
                             );
                           } else {
-                            return SizedBox(
-                              child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: ListBuilder(
-                                    listSize: ls.length,
-                                    listValues: ls,
-                                  )),
-                            );
+                            return ls.isEmpty
+                                ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Card(
+                                      elevation: 0,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground,
+                                      child: ListTile(
+                                        leading: const Icon(
+                                            Icons.check,
+                                            color: Colors.green,
+                                            size: 30),
+                                        title: Text('Sem valores a serem exibos!',
+                                            style: const TextStyle(fontSize: 17)),
+                                      ),
+                                    ),
+                                )
+                                : SizedBox(
+                                    child: Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: ListBuilder(
+                                          listSize: ls.length,
+                                          listValues: ls,
+                                        )),
+                                  );
                           }
                         },
                       ),

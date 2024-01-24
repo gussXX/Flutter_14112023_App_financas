@@ -8,7 +8,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 
 class ChartBuilder extends StatefulWidget {
-  Map esAPI;
   double maxSize;
   double entrada;
   double saida;
@@ -17,7 +16,6 @@ class ChartBuilder extends StatefulWidget {
 
   ChartBuilder({
     super.key,
-    required this.esAPI,
     required this.maxSize,
     required this.entrada,
     required this.saida,
@@ -51,7 +49,6 @@ class _ChartBuilderState extends State<ChartBuilder> {
   @override
   Widget build(BuildContext context) {
     print('CHART CONSTRUIDO');
-    Map esAPI = widget.esAPI;
     double maxSize = widget.maxSize;
     double entrada = widget.entrada;
     double saida = widget.saida;
@@ -65,6 +62,7 @@ class _ChartBuilderState extends State<ChartBuilder> {
         ),
         alignment: BarChartAlignment.spaceAround,
         maxY: maxSize,
+        minY: 0,
         barTouchData: BarTouchData(
           touchTooltipData: BarTouchTooltipData(
             tooltipBgColor: Colors.blueGrey,
@@ -87,7 +85,7 @@ class _ChartBuilderState extends State<ChartBuilder> {
                     switch (value.toInt()) {
                       case 0:
                         return Text(
-                          '${formatoMoeda.format(esAPI['entrada'])}',
+                          '${formatoMoeda.format(entrada)}',
                           style: const TextStyle(color: Colors.green),
                         );
                       case 1:
@@ -132,8 +130,8 @@ class _ChartBuilderState extends State<ChartBuilder> {
             barRods: [
               BarChartRodData(
                 width: 20,
-                toY: rules.regraDeTres(esAPI['entrada'], esAPI['saida'],
-                    maxSize, esAPI['entrada']),
+                toY: entrada != 0 ? rules.regraDeTres(entrada, saida,
+                    maxSize, entrada) : 0,
                 color: Colors.green,
               ),
             ],
@@ -143,8 +141,8 @@ class _ChartBuilderState extends State<ChartBuilder> {
             barRods: [
               BarChartRodData(
                 width: 20,
-                toY: rules.regraDeTres(
-                    esAPI['entrada'], esAPI['saida'], maxSize, esAPI['saida']),
+                toY: saida != 0 ? rules.regraDeTres(
+                    entrada, saida, maxSize, saida) : 0,
                 color: Colors.red,
               ),
             ],
