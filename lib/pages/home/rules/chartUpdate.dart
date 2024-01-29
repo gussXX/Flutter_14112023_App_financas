@@ -11,7 +11,7 @@ class ChartUpdate {
     var mypc = '192.168.11.101:9080';
     var route = 'somar_entrada_e_saida';
     //
-    var request = Uri.http(mypc, route);
+    var request = Uri.http(myip, route);
     var header = {"Content-Type": "application/json"};
     Map<String, double> myMap = {};
 

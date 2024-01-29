@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:financas/mobX/app_state.dart';
 import 'package:financas/pages/home/build/barBuilder.dart';
+import 'package:financas/pages/home/build/buttonBuilder.dart';
 import 'package:financas/pages/home/build/chartBuilder.dart';
 import 'package:financas/pages/home/build/listBuilder.dart';
 import 'package:financas/pages/home/rules/chartUpdate.dart';
@@ -45,7 +46,7 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
   late Map<String, double> es;
   late List ls;
   late double randomValue;
-
+  late PageController pageController;
   //
   final listUpdate = ListUpdate();
   final chartUpdate = ChartUpdate();
@@ -59,7 +60,6 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
   Future<void> getChartValues() async {
     if (widget.appstate.chartLoadingState == true) {
       await Future.delayed(const Duration(seconds: 5));
-      //
       var response = await chartUpdate.chartUpdate();
       es = {'Entrada': response['entrada']!, 'Saida': response['saida']!};
       widget.appstate.changeChartLoadingState();
@@ -70,6 +70,9 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
   void initState() {
     print('SLIVERAPP BAR INICIADO');
     randomValue = Random().nextDouble() * 10000;
+    pageController = PageController(
+      viewportFraction: 0.25,
+    );
     super.initState();
     _getListValues = getListValues();
     _getChartValues = getChartValues();
@@ -77,6 +80,7 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
 
   @override
   void dispose() {
+    pageController.dispose();
     super.dispose();
   }
 
@@ -96,6 +100,7 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
 
     final rules = Rules();
     final barBuilder = BarBuilder();
+    final buttonBuilder = ButtonBuilder();
 
     return CustomScrollView(
       controller: widget.scrollController,
@@ -164,6 +169,14 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
         ),
         SliverList(
             delegate: SliverChildListDelegate.fixed([
+          SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 100,
+              child: PageView(
+                scrollDirection: Axis.horizontal,
+                controller: pageController,
+                children: buttonBuilder.buttonBuilder(context),
+              )),
           Center(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -171,30 +184,6 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: const BoxDecoration(color: Colors.transparent),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {},
-                            style: ButtonStyle(
-                              fixedSize:
-                                  const MaterialStatePropertyAll(Size(180, 20)),
-                              alignment: Alignment.center,
-                              elevation: const MaterialStatePropertyAll(0),
-                              backgroundColor: MaterialStatePropertyAll(
-                                Theme.of(context).colorScheme.onPrimary,
-                              ),
-                            ),
-                            child: Text('12/Fev | 20/Mar',
-                                style: Theme.of(context).textTheme.titleLarge),
-                          )
-                        ]),
-                  ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
                     child: Divider(
@@ -265,10 +254,8 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                                         .colorScheme
                                         .onBackground,
                                     child: ListTile(
-                                      leading: const Icon(
-                                            Icons.check,
-                                            color: Colors.green,
-                                            size: 30),
+                                      leading: const Icon(Icons.check,
+                                          color: Colors.green, size: 30),
                                       title: Text('',
                                           style: const TextStyle(fontSize: 17)),
                                       subtitle: Text(
@@ -281,22 +268,22 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                           } else {
                             return ls.isEmpty
                                 ? Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Card(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Card(
                                       elevation: 0,
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onBackground,
                                       child: ListTile(
-                                        leading: const Icon(
-                                            Icons.check,
-                                            color: Colors.green,
-                                            size: 30),
-                                        title: Text('Sem valores a serem exibos!',
-                                            style: const TextStyle(fontSize: 17)),
+                                        leading: const Icon(Icons.check,
+                                            color: Colors.green, size: 30),
+                                        title: Text(
+                                            'Sem valores a serem exibos!',
+                                            style:
+                                                const TextStyle(fontSize: 17)),
                                       ),
                                     ),
-                                )
+                                  )
                                 : SizedBox(
                                     child: Padding(
                                         padding: EdgeInsets.all(8.0),
