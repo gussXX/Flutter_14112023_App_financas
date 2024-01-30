@@ -10,8 +10,8 @@ class ListUpdate {
     // var url = 'localhost:9080';
     // var ip = '10.0.2.2:9080';
     //
-    var myip = '192.168.18.25:9080';
-    var mypc = '192.168.11.101:9080';
+    var note = '192.168.18.25:9080';
+    var desk = '192.168.11.101:9080';
     var route = 'mostrar_valores_de_um_mes';
     //
     Map<String, dynamic> body = {
@@ -22,7 +22,7 @@ class ListUpdate {
     };
 
     var bodyJson = json.encode(body);
-    var request = Uri.http(myip, route);
+    var request = Uri.http(desk, route);
     var header = {"Content-Type": "application/json"};
     //
 

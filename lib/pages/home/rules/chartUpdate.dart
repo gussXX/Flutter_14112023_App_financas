@@ -7,11 +7,11 @@ class ChartUpdate {
   Future<Map<String, double>> chartUpdate() async {
     // void chartUpdate() async {
     var client = http.Client();
-    var myip = '192.168.18.25:9080';
-    var mypc = '192.168.11.101:9080';
+    var note = '192.168.18.25:9080';
+    var desk = '192.168.11.101:9080';
     var route = 'somar_entrada_e_saida';
     //
-    var request = Uri.http(myip, route);
+    var request = Uri.http(desk, route);
     var header = {"Content-Type": "application/json"};
     Map<String, double> myMap = {};
 
