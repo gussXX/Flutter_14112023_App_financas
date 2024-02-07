@@ -18,7 +18,7 @@ class ListUpdate {
       "id": "64cfc4bcdd83f5737a40f71d",
       "user": "Teste",
       "years": 2024,
-      "mounth": "February"
+      "mounth": "January"
     };
 
     var bodyJson = json.encode(body);
@@ -44,7 +44,6 @@ class ListUpdate {
       }
       //ESPERADO: 200
       //
-      print('Sobre o mes atual: ${currentMounth}');
       return currentMounth;
     } catch (error) {
       //ESPERADO: 200

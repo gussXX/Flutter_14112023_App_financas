@@ -1,5 +1,7 @@
 // ignore_for_file: file_names, unnecessary_brace_in_string_interps, unnecessary_string_interpolations
 
+import 'dart:ui';
+
 import 'package:financas/mobX/app_state.dart';
 import 'package:financas/pages/home/rules/rules.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +15,11 @@ class BarBuilder {
 
   final formatoMoeda = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
 
-  SizedBox collapsedBar({
-    required BuildContext context,
-    required Rules rules,
-    required AppState appstate,
-  }) {
+  SizedBox collapsedBar(
+      {required BuildContext context,
+      required Rules rules,
+      required AppState appstate,
+      required double randomValue}) {
     return SizedBox(
       key: const ValueKey(1),
       child: Padding(
@@ -27,24 +29,23 @@ class BarBuilder {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              'Olá, Gustavo!',
-              style: Theme.of(context).textTheme.bodyLarge,
+              "${formatoMoeda.format(randomValue)}",
+              style: TextStyle(
+                color: rules.textColors(context),
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            Icon(Icons.keyboard_arrow_right_outlined,
-                size: 30,
-                color: rules.iconColors(currentBrightness, appstate.percent))
           ],
         ),
       ),
     );
   }
 
-  Row expandedBar({
-    required BuildContext context,
-    required Rules rules,
-    required AppState appstate,
-    required double randomValue
-  }) {
+  Row expandedBar(
+      {required BuildContext context,
+      required Rules rules,
+      required AppState appstate,
+      required double randomValue}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -59,18 +60,33 @@ class BarBuilder {
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  'Seu saldo',
-                  style: Theme.of(context).textTheme.titleMedium,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Saldo de',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    Text(
+                      "${formatoMoeda.format(randomValue)}",
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ],
                 ),
-                Text(
-                  "${formatoMoeda.format(randomValue)}",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
+                Container(height: 120, width: 1, decoration: BoxDecoration(color: Theme.of(context).colorScheme.tertiary)),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                     Text('Saúde financeira:', style: Theme.of(context).textTheme.bodySmall,),
+                     Text('Estável.', style: Theme.of(context).textTheme.titleSmall,),
+                  ],
+                )
               ],
             ),
           ),

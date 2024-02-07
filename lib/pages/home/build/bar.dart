@@ -56,7 +56,7 @@ class _BarBuilderState extends State<BarBuilder> {
                   Icon(Icons.keyboard_arrow_right_outlined,
                       size: 30,
                       color:
-                          rules.iconColors(currentBrightness, appstate.percent))
+                          rules.iconColors(currentBrightness, appstate.percent, context))
                 ],
               ),
             ),

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class ButtonBuilder {
@@ -5,6 +7,10 @@ class ButtonBuilder {
     {'icon': Icon(Icons.add), 'tootip': 'Inserir'},
     {'icon': Icon(Icons.calendar_month), 'tootip': 'Selecionar datas'},
     {'icon': Icon(Icons.settings), 'tootip': 'COnfigurações'},
+    //
+    {'icon': Icon(Icons.people), 'tootip': 'Inserir'},
+    {'icon': Icon(Icons.brightness_1_outlined), 'tootip': 'Selecionar datas'},
+    {'icon': Icon(Icons.format_align_center), 'tootip': 'COnfigurações'},
   ];
 
   List<Widget> buttons = [];
@@ -17,8 +23,9 @@ class ButtonBuilder {
           icon: iconsMap[i]['icon'],
           tooltip: iconsMap[i]['tootip'],
           style: ButtonStyle(
-              iconColor: MaterialStateProperty.all(const Color(0xff325D55)),
-              iconSize: const MaterialStatePropertyAll(40),
+              iconColor: MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.primary),
+              iconSize: const MaterialStatePropertyAll(30),
               shape: MaterialStateProperty.all(RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10))),
               backgroundColor: MaterialStatePropertyAll(

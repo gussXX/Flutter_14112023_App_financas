@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, must_be_immutable, unused_local_variable, avoid_print, prefer_const_constructors, no_logic_in_create_state, unused_field
+// ignore_for_file: file_names, must_be_immutable, unused_local_variable, avoid_print, prefer_const_constructors, no_logic_in_create_state, unused_field, avoid_unnecessary_containers
 import 'dart:math';
 
 import 'package:financas/mobX/app_state.dart';
@@ -117,8 +117,8 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
           shadowColor: Colors.transparent,
           backgroundColor: percent <= 1.0
               ? Color.lerp(Theme.of(context).colorScheme.background,
-                  Theme.of(context).colorScheme.primary, percent) as Color
-              : Theme.of(context).colorScheme.primary,
+                  Theme.of(context).colorScheme.onPrimary, percent) as Color
+              : Theme.of(context).colorScheme.onPrimary,
           flexibleSpace: FlexibleSpaceBar(
             titlePadding: const EdgeInsets.only(top: 0, bottom: 20),
             title: AnimatedSwitcher(
@@ -135,6 +135,7 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                         context: context,
                         rules: rules,
                         appstate: appstate,
+                        randomValue: randomValue
                       )
                     : barBuilder.expandedBar(
                         context: context,
@@ -153,25 +154,28 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                     getListValues();
                   },
                   icon: const Icon(Icons.remove_red_eye_outlined),
-                  color: rules.iconColors(currentBrightness, appstate.percent));
+                  color: rules.iconColors(
+                      currentBrightness, appstate.percent, context));
             }),
             IconButton(
                 onPressed: () async {
                   chartUpdate.chartUpdate();
                 },
                 icon: const Icon(Icons.flag_outlined),
-                color: rules.iconColors(currentBrightness, appstate.percent)),
+                color: rules.iconColors(
+                    currentBrightness, appstate.percent, context)),
             IconButton(
                 onPressed: () {},
                 icon: const Icon(Icons.person),
-                color: rules.iconColors(currentBrightness, appstate.percent))
+                color: rules.iconColors(
+                    currentBrightness, appstate.percent, context))
           ],
         ),
         SliverList(
             delegate: SliverChildListDelegate.fixed([
           SizedBox(
               width: MediaQuery.of(context).size.width,
-              height: 100,
+              height: 70,
               child: PageView(
                 scrollDirection: Axis.horizontal,
                 controller: pageController,
@@ -187,7 +191,7 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
                     child: Divider(
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      color: Theme.of(context).colorScheme.tertiary,
                       height: 2,
                     ),
                   ),
@@ -203,21 +207,24 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                               child: FutureBuilder(
                                   future: _getChartValues,
                                   builder: (contex, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return ChartBuilder(
-                                          appstate: appstate,
-                                          building: appstate.chartLoadingState,
-                                          maxSize: 100,
-                                          entrada: 1,
-                                          saida: 1);
-                                    } else {
-                                      return ChartBuilder(
-                                          appstate: appstate,
-                                          building: appstate.chartLoadingState,
-                                          maxSize: 100,
-                                          entrada: es['Entrada']!,
-                                          saida: es['Saida']!);
+                                    switch (snapshot.connectionState) {
+                                      case ConnectionState.waiting:
+                                        return ChartBuilder(
+                                            appstate: appstate,
+                                            building: appstate.chartLoadingState,
+                                            maxSize: 100,
+                                            entrada: 1,
+                                            saida: 1);
+                                      case ConnectionState.done:
+                                        return ChartBuilder(
+                                            appstate: appstate,
+                                            building: appstate.chartLoadingState,
+                                            maxSize: 100,
+                                            entrada: es['Entrada']!,
+                                            saida: es['Saida']!);
+
+                                      default:
+                                        return Container();
                                     }
                                   }));
                         },
@@ -225,15 +232,10 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
                     child: Divider(
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      color: Theme.of(context).colorScheme.tertiary,
                       height: 2,
                     ),
                   ),
-                  // Observer(
-                  //   builder: (_) {
-                  //     return Text('Valor = ${appstate.value}');
-                  //   },
-                  // ),
                   Observer(builder: (_) {
                     return Skeletonizer(
                       enabled: appstate.listLoadingState,
@@ -243,55 +245,40 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                       child: FutureBuilder(
                         future: _getListValues,
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return SizedBox(
-                              child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Card(
-                                    elevation: 0,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onBackground,
-                                    child: ListTile(
-                                      leading: const Icon(Icons.check,
-                                          color: Colors.green, size: 30),
-                                      title: Text('',
-                                          style: const TextStyle(fontSize: 17)),
-                                      subtitle: Text(
-                                        '',
-                                        style: const TextStyle(fontSize: 14),
-                                      ),
-                                    ),
-                                  )),
-                            );
-                          } else {
-                            return ls.isEmpty
-                                ? Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.waiting:
+                              return SizedBox(
+                                child: Padding(
+                                    padding: EdgeInsets.all(8.0),
                                     child: Card(
                                       elevation: 0,
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onBackground,
                                       child: ListTile(
-                                        leading: const Icon(Icons.check,
+                                        leading: const Icon(Icons.circle,
                                             color: Colors.green, size: 30),
-                                        title: Text(
-                                            'Sem valores a serem exibos!',
+                                        title: Text('',
                                             style:
                                                 const TextStyle(fontSize: 17)),
+                                        subtitle: Text(
+                                          '',
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                : SizedBox(
-                                    child: Padding(
-                                        padding: EdgeInsets.all(8.0),
-                                        child: ListBuilder(
-                                          listSize: ls.length,
-                                          listValues: ls,
-                                        )),
-                                  );
+                                    )),
+                              );
+                            case ConnectionState.done:
+                              return SizedBox(
+                                child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: ListBuilder(
+                                      listSize: ls.length,
+                                      listValues: ls,
+                                    )),
+                              );
+                            default:
+                              return Container();
                           }
                         },
                       ),

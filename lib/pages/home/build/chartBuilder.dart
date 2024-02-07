@@ -1,5 +1,4 @@
 // ignore_for_file: file_names, must_be_immutable, unnecessary_string_interpolations, no_logic_in_create_state, avoid_print, sized_box_for_whitespace, unused_local_variable, unused_import
-
 import 'package:financas/mobX/app_state.dart';
 import 'package:financas/pages/home/rules/rules.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -65,11 +64,11 @@ class _ChartBuilderState extends State<ChartBuilder> {
         minY: 0,
         barTouchData: BarTouchData(
           touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: Colors.blueGrey,
+            tooltipBgColor: Colors.black,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
               return BarTooltipItem(
-                'Valor ${group.x}',
-                const TextStyle(color: Colors.grey),
+                '',
+                const TextStyle(color: Colors.grey, fontSize: 12),
               );
             },
           ),
@@ -101,20 +100,27 @@ class _ChartBuilderState extends State<ChartBuilder> {
             leftTitles: const AxisTitles(drawBelowEverything: false),
             bottomTitles: AxisTitles(
               drawBelowEverything: true,
+              axisNameSize: 50,
               sideTitles: SideTitles(
                 reservedSize: 40,
                 showTitles: true,
                 getTitlesWidget: (value, meta) {
                   switch (value.toInt()) {
                     case 0:
-                      return const Text(
-                        'Entradas',
-                        style: TextStyle(color: Colors.green),
+                      return const Padding(
+                        padding:  EdgeInsets.only(top: 10),
+                        child: Text(
+                          'Entradas',
+                          style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+                        ),
                       );
                     case 1:
-                      return const Text(
-                        'Saídas',
-                        style: TextStyle(color: Colors.red),
+                      return const Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Text(
+                          'Saídas',
+                          style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                        ),
                       );
                     default:
                       return Text(meta.toString());
@@ -129,7 +135,8 @@ class _ChartBuilderState extends State<ChartBuilder> {
             x: 0,
             barRods: [
               BarChartRodData(
-                width: 20,
+                width: 70,
+                borderRadius: BorderRadius.circular(12),
                 toY: entrada != 0 ? rules.regraDeTres(entrada, saida,
                     maxSize, entrada) : 0,
                 color: Colors.green,
@@ -140,7 +147,8 @@ class _ChartBuilderState extends State<ChartBuilder> {
             x: 1,
             barRods: [
               BarChartRodData(
-                width: 20,
+                width: 70,
+                borderRadius: BorderRadius.circular(12),
                 toY: saida != 0 ? rules.regraDeTres(
                     entrada, saida, maxSize, saida) : 0,
                 color: Colors.red,

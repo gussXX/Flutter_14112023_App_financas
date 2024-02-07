@@ -25,7 +25,7 @@ class ChartUpdate {
             "id": "64cfc4bcdd83f5737a40f71d",
             "user": "Teste",
             "years": 2024,
-            "mounths": "February",
+            "mounths": "January",
             "tipe": element.toString()
           }),
           headers: header,
