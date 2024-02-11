@@ -22,7 +22,7 @@ class ListUpdate {
     };
 
     var bodyJson = json.encode(body);
-    var request = Uri.http(desk, route);
+    var request = Uri.http(note, route);
     var header = {"Content-Type": "application/json"};
     //
 

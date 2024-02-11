@@ -16,6 +16,9 @@ abstract class AppStateBase with Store {
   @observable
   bool listLoadingState = true;
 
+  @observable
+  bool enableFilter = false;
+
   @action
   void increment() {
     value++;
@@ -39,5 +42,11 @@ abstract class AppStateBase with Store {
   @action
   void resetListLoadingState(value) {
     !value;
+  }
+
+  @action
+  bool changeStateFilter() {
+    bool result = enableFilter = !enableFilter;
+    return result;
   }
 }

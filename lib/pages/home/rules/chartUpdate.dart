@@ -11,7 +11,7 @@ class ChartUpdate {
     var desk = '192.168.11.101:9080';
     var route = 'somar_entrada_e_saida';
     //
-    var request = Uri.http(desk, route);
+    var request = Uri.http(note, route);
     var header = {"Content-Type": "application/json"};
     Map<String, double> myMap = {};
 

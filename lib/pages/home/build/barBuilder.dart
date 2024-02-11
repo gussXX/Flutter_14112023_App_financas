@@ -1,7 +1,5 @@
 // ignore_for_file: file_names, unnecessary_brace_in_string_interps, unnecessary_string_interpolations
 
-import 'dart:ui';
-
 import 'package:financas/mobX/app_state.dart';
 import 'package:financas/pages/home/rules/rules.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +53,7 @@ class BarBuilder {
           width: MediaQuery.of(context).size.width - 150,
           height: 150,
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(20)),
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
             color: Theme.of(context).colorScheme.onBackground,
           ),
           child: Padding(

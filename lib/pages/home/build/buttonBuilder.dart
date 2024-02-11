@@ -1,16 +1,22 @@
 // ignore_for_file: file_names
-
+import 'package:financas/pages/home/rules/rules.dart';
 import 'package:flutter/material.dart';
 
 class ButtonBuilder {
-  List<Map> iconsMap = const [
-    {'icon': Icon(Icons.add), 'tootip': 'Inserir'},
-    {'icon': Icon(Icons.calendar_month), 'tootip': 'Selecionar datas'},
-    {'icon': Icon(Icons.settings), 'tootip': 'COnfigurações'},
+  
+  final rules = Rules();
+
+  List<Map<String, dynamic>> iconsMap = [
+    {'icon': const Icon(Icons.add), 'tootip': 'Inserir'},
+    {'icon': const Icon(Icons.calendar_month), 'tootip': 'Selecionar datas'},
+    {'icon': const Icon(Icons.settings), 'tootip': 'COnfigurações'},
     //
-    {'icon': Icon(Icons.people), 'tootip': 'Inserir'},
-    {'icon': Icon(Icons.brightness_1_outlined), 'tootip': 'Selecionar datas'},
-    {'icon': Icon(Icons.format_align_center), 'tootip': 'COnfigurações'},
+    {'icon': const Icon(Icons.people), 'tootip': 'Inserir'},
+    {
+      'icon': const Icon(Icons.brightness_1_outlined),
+      'tootip': 'Selecionar datas'
+    },
+    {'icon': const Icon(Icons.format_align_center), 'tootip': 'COnfigurações'},
   ];
 
   List<Widget> buttons = [];
@@ -19,7 +25,9 @@ class ButtonBuilder {
       buttons.add(Padding(
         padding: const EdgeInsets.only(right: 10),
         child: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            iconsMap[i]['action'];
+          },
           icon: iconsMap[i]['icon'],
           tooltip: iconsMap[i]['tootip'],
           style: ButtonStyle(
@@ -27,7 +35,7 @@ class ButtonBuilder {
                   Theme.of(context).colorScheme.primary),
               iconSize: const MaterialStatePropertyAll(30),
               shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10))),
+                  borderRadius: BorderRadius.circular(8))),
               backgroundColor: MaterialStatePropertyAll(
                   Theme.of(context).colorScheme.onBackground)),
         ),
