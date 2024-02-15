@@ -72,6 +72,166 @@ mixin _$AppState on AppStateBase, Store {
     });
   }
 
+  late final _$enableFilterAtom =
+      Atom(name: 'AppStateBase.enableFilter', context: context);
+
+  @override
+  bool get enableFilter {
+    _$enableFilterAtom.reportRead();
+    return super.enableFilter;
+  }
+
+  @override
+  set enableFilter(bool value) {
+    _$enableFilterAtom.reportWrite(value, super.enableFilter, () {
+      super.enableFilter = value;
+    });
+  }
+
+  late final _$balanceAtom =
+      Atom(name: 'AppStateBase.balance', context: context);
+
+  @override
+  double get balance {
+    _$balanceAtom.reportRead();
+    return super.balance;
+  }
+
+  @override
+  set balance(double value) {
+    _$balanceAtom.reportWrite(value, super.balance, () {
+      super.balance = value;
+    });
+  }
+
+  late final _$dropdownButtonValueAtom =
+      Atom(name: 'AppStateBase.dropdownButtonValue', context: context);
+
+  @override
+  String get dropdownButtonValue {
+    _$dropdownButtonValueAtom.reportRead();
+    return super.dropdownButtonValue;
+  }
+
+  @override
+  set dropdownButtonValue(String value) {
+    _$dropdownButtonValueAtom.reportWrite(value, super.dropdownButtonValue, () {
+      super.dropdownButtonValue = value;
+    });
+  }
+
+  late final _$selectButtonAtom =
+      Atom(name: 'AppStateBase.selectButton', context: context);
+
+  @override
+  bool get selectButton {
+    _$selectButtonAtom.reportRead();
+    return super.selectButton;
+  }
+
+  @override
+  set selectButton(bool value) {
+    _$selectButtonAtom.reportWrite(value, super.selectButton, () {
+      super.selectButton = value;
+    });
+  }
+
+  late final _$fontDateTimeAtom =
+      Atom(name: 'AppStateBase.fontDateTime', context: context);
+
+  @override
+  DateTime get fontDateTime {
+    _$fontDateTimeAtom.reportRead();
+    return super.fontDateTime;
+  }
+
+  @override
+  set fontDateTime(DateTime value) {
+    _$fontDateTimeAtom.reportWrite(value, super.fontDateTime, () {
+      super.fontDateTime = value;
+    });
+  }
+
+  late final _$fontStringAtom =
+      Atom(name: 'AppStateBase.fontString', context: context);
+
+  @override
+  String get fontString {
+    _$fontStringAtom.reportRead();
+    return super.fontString;
+  }
+
+  @override
+  set fontString(String value) {
+    _$fontStringAtom.reportWrite(value, super.fontString, () {
+      super.fontString = value;
+    });
+  }
+
+  late final _$fontMonthAtom =
+      Atom(name: 'AppStateBase.fontMonth', context: context);
+
+  @override
+  String get fontMonth {
+    _$fontMonthAtom.reportRead();
+    return super.fontMonth;
+  }
+
+  @override
+  set fontMonth(String value) {
+    _$fontMonthAtom.reportWrite(value, super.fontMonth, () {
+      super.fontMonth = value;
+    });
+  }
+
+  late final _$fontValueAtom =
+      Atom(name: 'AppStateBase.fontValue', context: context);
+
+  @override
+  double get fontValue {
+    _$fontValueAtom.reportRead();
+    return super.fontValue;
+  }
+
+  @override
+  set fontValue(double value) {
+    _$fontValueAtom.reportWrite(value, super.fontValue, () {
+      super.fontValue = value;
+    });
+  }
+
+  late final _$fontParcAtom =
+      Atom(name: 'AppStateBase.fontParc', context: context);
+
+  @override
+  int get fontParc {
+    _$fontParcAtom.reportRead();
+    return super.fontParc;
+  }
+
+  @override
+  set fontParc(int value) {
+    _$fontParcAtom.reportWrite(value, super.fontParc, () {
+      super.fontParc = value;
+    });
+  }
+
+  late final _$requestFilterAtom =
+      Atom(name: 'AppStateBase.requestFilter', context: context);
+
+  @override
+  Map<dynamic, dynamic> get requestFilter {
+    _$requestFilterAtom.reportRead();
+    return super.requestFilter;
+  }
+
+  @override
+  set requestFilter(Map<dynamic, dynamic> value) {
+    _$requestFilterAtom.reportWrite(value, super.requestFilter, () {
+      super.requestFilter = value;
+    });
+  }
+
   late final _$AppStateBaseActionController =
       ActionController(name: 'AppStateBase', context: context);
 
@@ -131,12 +291,77 @@ mixin _$AppState on AppStateBase, Store {
   }
 
   @override
+  bool changeStateFilter() {
+    final _$actionInfo = _$AppStateBaseActionController.startAction(
+        name: 'AppStateBase.changeStateFilter');
+    try {
+      return super.changeStateFilter();
+    } finally {
+      _$AppStateBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void getBalance(double value) {
+    final _$actionInfo = _$AppStateBaseActionController.startAction(
+        name: 'AppStateBase.getBalance');
+    try {
+      return super.getBalance(value);
+    } finally {
+      _$AppStateBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void changeDropdownButtonValue(String value) {
+    final _$actionInfo = _$AppStateBaseActionController.startAction(
+        name: 'AppStateBase.changeDropdownButtonValue');
+    try {
+      return super.changeDropdownButtonValue(value);
+    } finally {
+      _$AppStateBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void changeSelectButton() {
+    final _$actionInfo = _$AppStateBaseActionController.startAction(
+        name: 'AppStateBase.changeSelectButton');
+    try {
+      return super.changeSelectButton();
+    } finally {
+      _$AppStateBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void changeFontString(dynamic value) {
+    final _$actionInfo = _$AppStateBaseActionController.startAction(
+        name: 'AppStateBase.changeFontString');
+    try {
+      return super.changeFontString(value);
+    } finally {
+      _$AppStateBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 value: ${value},
 percent: ${percent},
 chartLoadingState: ${chartLoadingState},
-listLoadingState: ${listLoadingState}
+listLoadingState: ${listLoadingState},
+enableFilter: ${enableFilter},
+balance: ${balance},
+dropdownButtonValue: ${dropdownButtonValue},
+selectButton: ${selectButton},
+fontDateTime: ${fontDateTime},
+fontString: ${fontString},
+fontMonth: ${fontMonth},
+fontValue: ${fontValue},
+fontParc: ${fontParc},
+requestFilter: ${requestFilter}
     ''';
   }
 }

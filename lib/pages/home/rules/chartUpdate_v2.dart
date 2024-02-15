@@ -4,7 +4,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ChartUpdatev2 {
-  Future<Map> chartUpdate() async {
+  Future<Map> chartUpdate({
+    required String id,
+    required String user,
+    required Map filter,
+  }) async {
     //
     var client = http.Client();
     var note = '192.168.18.25:9080';
@@ -12,7 +16,7 @@ class ChartUpdatev2 {
     var online = '10.0.2.2:9080';
     var route = 'filtrar_data';
     //
-    var request = Uri.http(note, route);
+    var request = Uri.http(desk, route);
     var header = {"Content-Type": "application/json"};
     Map<String, double> myMap = {};
 
@@ -21,19 +25,23 @@ class ChartUpdatev2 {
       var response = await client.post(
         request,
         body: json.encode({
-          "id": "64cfc4bcdd83f5737a40f71d",
-          "user": "Teste",
-          "years": 2024,
+          "id": id,
+          "user": user,
+          //
+          "startDate": filter['start'],
+          "finalDate": filter['final']
         }),
         headers: header,
       );
-
-      // var mapencode = (response.body);
-      // Map<String, dynamic> mapDynamic = json.decode(mapencode);
-      // Map<String, dynamic> mapDouble = Map<String, double>.from(mapDynamic
-      //     .map((key, value) => MapEntry<String, dynamic>(key, value)));
-
-      return jsonDecode(response.body);
+      //
+      var jsonDedoce = jsonDecode(response.body);
+      var finalResponse = {
+        'entrada': double.parse(jsonDedoce['entrada']),
+        'saida' : double.parse(jsonDedoce['saida'])
+      };
+      //
+      print(finalResponse);
+      return finalResponse;
       //
     } catch (error) {
       print('Ocorreu um erro: ${error}');

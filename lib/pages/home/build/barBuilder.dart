@@ -17,7 +17,7 @@ class BarBuilder {
       {required BuildContext context,
       required Rules rules,
       required AppState appstate,
-      required double randomValue}) {
+      required double balance}) {
     return SizedBox(
       key: const ValueKey(1),
       child: Padding(
@@ -27,7 +27,7 @@ class BarBuilder {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              "${formatoMoeda.format(randomValue)}",
+              "${formatoMoeda.format(balance)}",
               style: TextStyle(
                 color: rules.textColors(context),
                 fontWeight: FontWeight.bold,
@@ -43,7 +43,7 @@ class BarBuilder {
       {required BuildContext context,
       required Rules rules,
       required AppState appstate,
-      required double randomValue}) {
+      required double balance}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -71,18 +71,28 @@ class BarBuilder {
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     Text(
-                      "${formatoMoeda.format(randomValue)}",
+                      "${formatoMoeda.format(balance)}",
                       style: Theme.of(context).textTheme.titleMedium,
-                    ),
+                    )
                   ],
                 ),
-                Container(height: 120, width: 1, decoration: BoxDecoration(color: Theme.of(context).colorScheme.tertiary)),
+                Container(
+                    height: 120,
+                    width: 1,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.tertiary)),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                     Text('Saúde financeira:', style: Theme.of(context).textTheme.bodySmall,),
-                     Text('Estável.', style: Theme.of(context).textTheme.titleSmall,),
+                    Text(
+                      'Saúde financeira:',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    Text(
+                      'Estável.',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                   ],
                 )
               ],

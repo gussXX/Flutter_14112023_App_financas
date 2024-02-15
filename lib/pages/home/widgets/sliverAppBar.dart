@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, must_be_immutable, unused_local_variable, avoid_print, prefer_const_constructors, no_logic_in_create_state, unused_field, avoid_unnecessary_containers, non_constant_identifier_names
+// ignore_for_file: file_names, must_be_immutable, unused_local_variable, avoid_print, prefer_const_constructors, no_logic_in_create_state, unused_field, avoid_unnecessary_containers, non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_string_interpolations
 import 'dart:math';
 
 import 'package:financas/mobX/app_state.dart';
@@ -13,6 +13,7 @@ import 'package:financas/pages/home/rules/listUpdate_v2.dart';
 import 'package:financas/pages/home/rules/rules.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class SliverAppBarApp extends StatefulWidget {
@@ -46,10 +47,16 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
   //
   late Future<void> _getChartValues;
   late Future<void> _getListValues;
+  late Future<void> _dateFormat;
   //
-  late Map<String, dynamic> es;
+  late Map<String, double> chartObject;
   late List ls;
+  //
   late double randomValue;
+  late double balance;
+  late Map finalFilter;
+  late String textRange;
+  //
   late PageController pageController;
   //
   final listUpdate = ListUpdate();
@@ -58,50 +65,78 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
   final chartUpdate_v2 = ChartUpdatev2();
   final listUpdate_v2 = ListUpdatev2();
   //
+  Future<void> dateFormat() async {
+    await initializeDateFormatting('pt_BR', null);
+  }
 
   Future<void> getListValues({
     required bool fontFilter,
     required Map range,
   }) async {
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(milliseconds: 500));
     //
     var defaultFilter = await rules.defautDateRange();
     var customFilter = range;
     //
-    var finalFilter = fontFilter == false ? defaultFilter : range;
-    var response = await listUpdate_v2.listUpdate(
-      id: '64cfc4bcdd83f5737a40f71d',
-      user: 'Teste',
-      filter: finalFilter,
+    finalFilter = fontFilter == false ? defaultFilter : range;
+    //
+    try {
+      var response = await listUpdate_v2.listUpdate(
+        id: '64cfc4bcdd83f5737a40f71d',
+        user: 'Teste',
+        filter: finalFilter,
     );
-    ls = response;
+      ls = response;
+    } catch (error) {
+      ls = [];
+    }
+    await Future.delayed(const Duration(milliseconds: 500));
     widget.appstate.changeListLoadingState();
   }
 
-  Future<void> getChartValues() async {
+  Future<void> getChartValues({
+    required bool fontFilter,
+    required Map range,
+  }) async {
     if (widget.appstate.chartLoadingState == true) {
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(milliseconds: 500));
       //
-      var response = await chartUpdate_v2.chartUpdate();
-      es = {
-        'Entrada': response['chart']['entrada']!,
-        'Saida': response['chart']['saida']!
+      var defaultFilter = await rules.defautDateRange();
+      var customFilter = range;
+      //
+      finalFilter = fontFilter == false 
+      ? defaultFilter 
+      : range;
+      //
+      var response = await chartUpdate_v2.chartUpdate(
+        id: '64cfc4bcdd83f5737a40f71d',
+        user: 'Teste',
+        filter: finalFilter,
+      );
+      //
+      chartObject = {
+        'Entrada': response['entrada'],
+        'Saida': response['saida']
       };
+      balance = response['entrada'] - response['saida'];
       //
+      String textRange = rules.getMonths(finalFilter);
+      //
+      await Future.delayed(const Duration(milliseconds: 500));
+      widget.appstate.getBalance(balance);
       widget.appstate.changeChartLoadingState();
     }
   }
 
   @override
   void initState() {
-    print('SLIVERAPP BAR INICIADO');
-    randomValue = Random().nextDouble() * 10000;
+    initializeDateFormatting();
     pageController = PageController(
       viewportFraction: 0.25,
     );
     super.initState();
     _getListValues = getListValues(fontFilter: false, range: {});
-    _getChartValues = getChartValues();
+    _getChartValues = getChartValues(fontFilter: false, range: {});
   }
 
   @override
@@ -112,8 +147,6 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
 
   @override
   Widget build(BuildContext context) {
-    print('SLIVERAPP BAR CONSTRUIDO');
-
     Random random = Random();
     BuildContext context = widget.context;
     AppState appstate = widget.appstate;
@@ -149,49 +182,50 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
             title: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 400),
                 transitionBuilder: (Widget child, Animation<double> animation) {
-                  return ScaleTransition(
-                    scale:
+                  return FadeTransition(
+                    opacity:
                         Tween<double>(begin: 0.0, end: 1.0).animate(animation),
                     child: child,
                   );
                 },
                 child: appstate.percent > 0.5
-                    ? barBuilder.collapsedBar(
-                        context: context,
-                        rules: rules,
-                        appstate: appstate,
-                        randomValue: randomValue)
-                    : barBuilder.expandedBar(
-                        context: context,
-                        rules: rules,
-                        appstate: appstate,
-                        randomValue: randomValue)),
-            centerTitle: true,
+                    ? Observer(builder: (_) {
+                        return barBuilder.collapsedBar(
+                          context: context,
+                          rules: rules,
+                          appstate: appstate,
+                          balance: appstate.balance,
+                        );
+                      })
+                    //
+                    : Observer(
+                        key: UniqueKey(),
+                        builder: (_) {
+                          return barBuilder.expandedBar(
+                            context: context,
+                            rules: rules,
+                            appstate: appstate,
+                            balance: appstate.balance,
+                          );
+                        },
+                      )),
+            centerTitle: false,
           ),
           actions: [
             Observer(builder: (_) {
               return IconButton(
-                  onPressed: () async {
-                    appstate.changeChartLoadingState();
-                    appstate.changeListLoadingState();
-                    getChartValues();
-                    getListValues(fontFilter: false, range: {});
-                  },
+                  onPressed: () async {},
                   icon: const Icon(Icons.remove_red_eye_outlined),
                   color: rules.iconColors(
                       currentBrightness, appstate.percent, context));
             }),
             IconButton(
-                onPressed: () async {
-                  chartUpdate.chartUpdate();
-                },
+                onPressed: () async {},
                 icon: const Icon(Icons.flag_outlined),
                 color: rules.iconColors(
                     currentBrightness, appstate.percent, context)),
             IconButton(
-                onPressed: () async {
-                  rules.pickedDateRange(context);
-                },
+                onPressed: () async {},
                 icon: const Icon(Icons.person),
                 color: rules.iconColors(
                     currentBrightness, appstate.percent, context))
@@ -209,14 +243,24 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                   IconButton(
                     onPressed: () async {
                       var response = await rules.pickedDateRange(context);
-                      appstate.changeListLoadingState();
-                      await getListValues(
-                        fontFilter: true,
-                        range: response,
-                      );
+                      if (response.isNotEmpty) {
+                        //
+                        appstate.changeListLoadingState();
+                        appstate.changeChartLoadingState();
+                        //
+                        await getChartValues(
+                          fontFilter: true,
+                          range: response,
+                        );
+                        //
+                        await getListValues(
+                          fontFilter: true,
+                          range: response,
+                        );
+                      }
                     },
-                    icon: Icon(Icons.add),
-                    tooltip: 'Inserir',
+                    icon: Icon(Icons.calendar_month_outlined),
+                    tooltip: 'Filtrar por data',
                     style: ButtonStyle(
                         iconColor: MaterialStateProperty.all(
                             Theme.of(context).colorScheme.primary),
@@ -242,6 +286,47 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                       height: 2,
                     ),
                   ),
+                  Observer(builder: (_) {
+                    return Skeletonizer(
+                        enabled: appstate.chartLoadingState,
+                        justifyMultiLineText: true,
+                        ignoreContainers: true,
+                        ignorePointers: true,
+                        child: FutureBuilder(
+                            future: _getChartValues,
+                            builder: (context, snapshot) {
+                              switch (snapshot.connectionState) {
+                                case ConnectionState.waiting:
+                                  return Center(
+                                    child: Text(
+                                      "_____________________",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
+                                  );
+                                  case ConnectionState.done:
+                                  return Center(
+                                    child: Text(
+                                      // "${finalFilter}" +
+                                      "${rules.getMonths(finalFilter)}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
+                                  );
+                                  default:
+                                  return Container();
+                              }
+                            }));
+                  }),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                    child: Divider(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      height: 2,
+                    ),
+                  ),
                   SizedBox(
                       height: 250,
                       child: Observer(
@@ -253,7 +338,7 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                               ignorePointers: true,
                               child: FutureBuilder(
                                   future: _getChartValues,
-                                  builder: (contex, snapshot) {
+                                  builder: (context, snapshot) {
                                     switch (snapshot.connectionState) {
                                       case ConnectionState.waiting:
                                         return ChartBuilder(
@@ -269,8 +354,8 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                                             building:
                                                 appstate.chartLoadingState,
                                             maxSize: 100,
-                                            entrada: es['Entrada']!,
-                                            saida: es['Saida']!);
+                                            entrada: chartObject['Entrada']!,
+                                            saida: chartObject['Saida']!);
 
                                       default:
                                         return Container();

@@ -1,9 +1,10 @@
+// ignore_for_file: avoid_print, unused_local_variable
+
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Rules {
-
   double regraDeTres(entrada, saida, maxSize, valorBuscado) {
     double somatoria = entrada + saida;
     double y = (maxSize * valorBuscado) / somatoria;
@@ -21,8 +22,7 @@ class Rules {
   }
 
   Color textColors(context) {
-
-  Brightness currentBrightness = MediaQuery.of(context).platformBrightness;
+    Brightness currentBrightness = MediaQuery.of(context).platformBrightness;
 
     return currentBrightness == Brightness.light
         ? const Color(0xffFFFFFF)
@@ -39,7 +39,8 @@ class Rules {
         context: context, firstDate: DateTime(200), lastDate: DateTime(2099));
     //
     if (dateRange == null) {
-      return await defautDateRange();
+      //return await defautDateRange();
+      return {};
     }
     //
     final originStartDate = dateRange.start.toString();
@@ -70,5 +71,20 @@ class Rules {
           .format(DateTime(now.year, now.month + 1, 0)),
     };
   }
-  
+
+  String getMonths(Map currentMounth) {
+    //•
+    String start = currentMounth['start'];
+    var startNumber = DateTime.parse(start);
+    var startName = DateFormat('MMMM', 'pt_BR')
+        .format(DateTime(DateTime.now().year, startNumber.month));
+    //
+    String end = currentMounth['final'];
+    var endNumber = DateTime.parse(end);
+    var endName = DateFormat('MMMM', 'pt_BR')
+        .format(DateTime(DateTime.now().year, endNumber.month));
+    //
+    String response = '${startNumber.day} de $startName   •   ${endNumber.day} de $endName';
+    return response;
+  }
 }

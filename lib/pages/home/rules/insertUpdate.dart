@@ -3,10 +3,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class ListUpdatev2 {
-  Future listUpdate({
-    required String id,
-    required String user,
+class InsertUpdate {
+  Future <bool> inserUpdate({
     required Map filter,
   }) async {
     //
@@ -14,31 +12,24 @@ class ListUpdatev2 {
     var note = '192.168.18.25:9080';
     var desk = '192.168.11.101:9080';
     var online = '10.0.2.2:9080';
-    var route = 'filtrar_list';
+    var route = 'inserir';
     //
     var request = Uri.http(desk, route);
     var header = {"Content-Type": "application/json"};
 
-    print(filter);
-
     try {
+      print(filter);
       //
       var response = await client.post(
         request,
-        body: json.encode({
-          "id": id,
-          "user": user,
-          //
-          "startDate": filter['start'],
-          "finalDate": filter['final']
-        }),
+        body: json.encode(filter),
         headers: header,
       );
-      return jsonDecode(response.body);
       //
+      return true;
     } catch (error) {
       print('Ocorreu um erro: ${error}');
-      return;
+      return false;
     } finally {
       client.close();
     }
