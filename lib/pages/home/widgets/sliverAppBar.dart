@@ -1,15 +1,12 @@
-// ignore_for_file: file_names, must_be_immutable, unused_local_variable, avoid_print, prefer_const_constructors, no_logic_in_create_state, unused_field, avoid_unnecessary_containers, non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_string_interpolations
-import 'dart:math';
-
 import 'package:financas/mobX/app_state.dart';
+//
 import 'package:financas/pages/home/build/barBuilder.dart';
-import 'package:financas/pages/home/build/buttonBuilder.dart';
 import 'package:financas/pages/home/build/chartBuilder.dart';
 import 'package:financas/pages/home/build/listBuilder.dart';
+//
 import 'package:financas/pages/home/rules/chartUpdate.dart';
-import 'package:financas/pages/home/rules/chartUpdate_v2.dart';
 import 'package:financas/pages/home/rules/listUpdate.dart';
-import 'package:financas/pages/home/rules/listUpdate_v2.dart';
+//
 import 'package:financas/pages/home/rules/rules.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -17,14 +14,14 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class SliverAppBarApp extends StatefulWidget {
-  BuildContext context;
-  AppState appstate;
-  String title;
-  ScrollController scrollController;
-  double percent;
-  double expandedHeight;
+  final BuildContext context;
+  final AppState appstate;
+  final String title;
+  final ScrollController scrollController;
+  final double percent;
+  final double expandedHeight;
 
-  SliverAppBarApp({
+  const SliverAppBarApp({
     super.key,
     required this.context,
     required this.appstate,
@@ -36,7 +33,6 @@ class SliverAppBarApp extends StatefulWidget {
 
   @override
   State<SliverAppBarApp> createState() {
-    print('SLIVERAPP BAR CRIADO');
     return _SliverAppBarAppState();
   }
 }
@@ -47,7 +43,6 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
   //
   late Future<void> _getChartValues;
   late Future<void> _getListValues;
-  late Future<void> _dateFormat;
   //
   late Map<String, double> chartObject;
   late List ls;
@@ -59,11 +54,8 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
   //
   late PageController pageController;
   //
-  final listUpdate = ListUpdate();
   final chartUpdate = ChartUpdate();
-  //
-  final chartUpdate_v2 = ChartUpdatev2();
-  final listUpdate_v2 = ListUpdatev2();
+  final listUpdate = ListUpdate();
   //
   Future<void> dateFormat() async {
     await initializeDateFormatting('pt_BR', null);
@@ -76,16 +68,15 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
     await Future.delayed(const Duration(milliseconds: 500));
     //
     var defaultFilter = await rules.defautDateRange();
-    var customFilter = range;
     //
     finalFilter = fontFilter == false ? defaultFilter : range;
     //
     try {
-      var response = await listUpdate_v2.listUpdate(
+      var response = await listUpdate.listUpdate(
         id: '64cfc4bcdd83f5737a40f71d',
         user: 'Teste',
         filter: finalFilter,
-    );
+      );
       ls = response;
     } catch (error) {
       ls = [];
@@ -102,13 +93,10 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
       await Future.delayed(const Duration(milliseconds: 500));
       //
       var defaultFilter = await rules.defautDateRange();
-      var customFilter = range;
       //
-      finalFilter = fontFilter == false 
-      ? defaultFilter 
-      : range;
+      finalFilter = fontFilter == false ? defaultFilter : range;
       //
-      var response = await chartUpdate_v2.chartUpdate(
+      var response = await chartUpdate.chartUpdate(
         id: '64cfc4bcdd83f5737a40f71d',
         user: 'Teste',
         filter: finalFilter,
@@ -119,8 +107,6 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
         'Saida': response['saida']
       };
       balance = response['entrada'] - response['saida'];
-      //
-      String textRange = rules.getMonths(finalFilter);
       //
       await Future.delayed(const Duration(milliseconds: 500));
       widget.appstate.getBalance(balance);
@@ -147,18 +133,14 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
 
   @override
   Widget build(BuildContext context) {
-    Random random = Random();
     BuildContext context = widget.context;
     AppState appstate = widget.appstate;
-    String title = widget.title;
-    ScrollController scrollController = widget.scrollController;
     double percent = widget.percent;
     double expandedHeight = widget.expandedHeight;
 
     Brightness currentBrightness = MediaQuery.of(context).platformBrightness;
 
     final barBuilder = BarBuilder();
-    final buttonBuilder = ButtonBuilder();
     //
     return CustomScrollView(
       controller: widget.scrollController,
@@ -233,6 +215,13 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
         ),
         SliverList(
             delegate: SliverChildListDelegate.fixed([
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+            child: Divider(
+              color: Theme.of(context).colorScheme.tertiary,
+              height: 1,
+            ),
+          ),
           SizedBox(
               width: MediaQuery.of(context).size.width,
               height: 70,
@@ -240,176 +229,204 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                 scrollDirection: Axis.horizontal,
                 controller: pageController,
                 children: [
-                  IconButton(
-                    onPressed: () async {
-                      var response = await rules.pickedDateRange(context);
-                      if (response.isNotEmpty) {
-                        //
-                        appstate.changeListLoadingState();
-                        appstate.changeChartLoadingState();
-                        //
-                        await getChartValues(
-                          fontFilter: true,
-                          range: response,
-                        );
-                        //
-                        await getListValues(
-                          fontFilter: true,
-                          range: response,
-                        );
-                      }
-                    },
-                    icon: Icon(Icons.calendar_month_outlined),
-                    tooltip: 'Filtrar por data',
-                    style: ButtonStyle(
-                        iconColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.primary),
-                        iconSize: const MaterialStatePropertyAll(30),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8))),
-                        backgroundColor: MaterialStatePropertyAll(
-                            Theme.of(context).colorScheme.onBackground)),
-                  )
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: IconButton(
+                      onPressed: () async {
+                        var response = await rules.pickedDateRange(context);
+                        if (response.isNotEmpty) {
+                          //
+                          appstate.changeListLoadingState();
+                          appstate.changeChartLoadingState();
+                          //
+                          await getChartValues(
+                            fontFilter: true,
+                            range: response,
+                          );
+                          //
+                          await getListValues(
+                            fontFilter: true,
+                            range: response,
+                          );
+                        }
+                      },
+                      icon: const Icon(Icons.calendar_month_outlined),
+                      tooltip: 'Filtrar por data',
+                      style: ButtonStyle(
+                          iconColor: MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.primary),
+                          iconSize: const MaterialStatePropertyAll(30),
+                          shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5))),
+                          backgroundColor: MaterialStatePropertyAll(
+                              Theme.of(context).colorScheme.onBackground)),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: IconButton(
+                        onPressed: null,
+                        icon: const Icon(Icons.filter_alt_rounded),
+                        tooltip: 'Filtrar por tipo',
+                        style: ButtonStyle(
+                            iconColor: MaterialStateProperty.all(
+                                Theme.of(context).colorScheme.primary),
+                            iconSize: const MaterialStatePropertyAll(30),
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5))),
+                            backgroundColor: MaterialStatePropertyAll(
+                                Theme.of(context).colorScheme.onBackground))),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: IconButton(
+                        onPressed: null,
+                        icon: const Icon(Icons.list),
+                        tooltip: 'Relatorios',
+                        style: ButtonStyle(
+                            iconColor: MaterialStateProperty.all(
+                                Theme.of(context).colorScheme.primary),
+                            iconSize: const MaterialStatePropertyAll(30),
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5))),
+                            backgroundColor: MaterialStatePropertyAll(
+                                Theme.of(context).colorScheme.onBackground))),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: IconButton(
+                        onPressed: null,
+                        icon: const Icon(Icons.timelapse_rounded),
+                        tooltip: 'Graficos',
+                        style: ButtonStyle(
+                            iconColor: MaterialStateProperty.all(
+                                Theme.of(context).colorScheme.primary),
+                            iconSize: const MaterialStatePropertyAll(30),
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5))),
+                            backgroundColor: MaterialStatePropertyAll(
+                                Theme.of(context).colorScheme.onBackground))),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: IconButton(
+                        onPressed: null,
+                        icon: const Icon(Icons.settings),
+                        tooltip: 'Configurações',
+                        style: ButtonStyle(
+                            iconColor: MaterialStateProperty.all(
+                                Theme.of(context).colorScheme.primary),
+                            iconSize: const MaterialStatePropertyAll(30),
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5))),
+                            backgroundColor: MaterialStatePropertyAll(
+                                Theme.of(context).colorScheme.onBackground))),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: IconButton(
+                        onPressed: null,
+                        icon: const Icon(Icons.keyboard_arrow_right_rounded),
+                        tooltip: 'Ver mais',
+                        style: ButtonStyle(
+                          iconColor: MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.primary),
+                          iconSize: const MaterialStatePropertyAll(30),
+                          shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5))),
+                        )),
+                  ),
                 ],
               )),
           Center(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-                    child: Divider(
-                      color: Theme.of(context).colorScheme.tertiary,
-                      height: 2,
-                    ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                  child: Divider(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    height: 1,
                   ),
-                  Observer(builder: (_) {
-                    return Skeletonizer(
-                        enabled: appstate.chartLoadingState,
-                        justifyMultiLineText: true,
-                        ignoreContainers: true,
-                        ignorePointers: true,
-                        child: FutureBuilder(
-                            future: _getChartValues,
-                            builder: (context, snapshot) {
-                              switch (snapshot.connectionState) {
-                                case ConnectionState.waiting:
-                                  return Center(
-                                    child: Text(
-                                      "_____________________",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
-                                    ),
-                                  );
-                                  case ConnectionState.done:
-                                  return Center(
-                                    child: Text(
-                                      // "${finalFilter}" +
-                                      "${rules.getMonths(finalFilter)}",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
-                                    ),
-                                  );
-                                  default:
-                                  return Container();
-                              }
-                            }));
-                  }),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-                    child: Divider(
-                      color: Theme.of(context).colorScheme.tertiary,
-                      height: 2,
-                    ),
-                  ),
-                  SizedBox(
-                      height: 250,
-                      child: Observer(
-                        builder: (_) {
-                          return Skeletonizer(
-                              enabled: appstate.chartLoadingState,
-                              justifyMultiLineText: true,
-                              ignoreContainers: true,
-                              ignorePointers: true,
-                              child: FutureBuilder(
-                                  future: _getChartValues,
-                                  builder: (context, snapshot) {
-                                    switch (snapshot.connectionState) {
-                                      case ConnectionState.waiting:
-                                        return ChartBuilder(
-                                            appstate: appstate,
-                                            building:
-                                                appstate.chartLoadingState,
-                                            maxSize: 100,
-                                            entrada: 1,
-                                            saida: 1);
-                                      case ConnectionState.done:
-                                        return ChartBuilder(
-                                            appstate: appstate,
-                                            building:
-                                                appstate.chartLoadingState,
-                                            maxSize: 100,
-                                            entrada: chartObject['Entrada']!,
-                                            saida: chartObject['Saida']!);
-
-                                      default:
-                                        return Container();
-                                    }
-                                  }));
-                        },
-                      )),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-                    child: Divider(
-                      color: Theme.of(context).colorScheme.tertiary,
-                      height: 2,
-                    ),
-                  ),
-                  Observer(builder: (_) {
-                    return Skeletonizer(
-                      enabled: appstate.listLoadingState,
+                ),
+                Observer(builder: (_) {
+                  return Skeletonizer(
+                      enabled: appstate.chartLoadingState,
                       justifyMultiLineText: true,
-                      ignoreContainers: false,
+                      ignoreContainers: true,
                       ignorePointers: true,
                       child: FutureBuilder(
-                        future: _getListValues,
+                          future: _getChartValues,
+                          builder: (context, snapshot) {
+                            switch (snapshot.connectionState) {
+                              case ConnectionState.waiting:
+                                return Center(
+                                  child: Text(
+                                    "_____________________",
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                );
+                              case ConnectionState.done:
+                                return Center(
+                                  child: Text(
+                                    // "${finalFilter}" +
+                                    rules.getMonths(finalFilter),
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                );
+                              default:
+                                return Container();
+                            }
+                          }));
+                }),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                  child: Divider(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    height: 1,
+                  ),
+                ),
+                Observer(
+                  builder: (_) {
+                    return Skeletonizer(
+                      enabled: appstate.chartLoadingState,
+                      justifyMultiLineText: true,
+                      ignoreContainers: true,
+                      ignorePointers: true,
+                      child: FutureBuilder(
+                        future: _getChartValues,
                         builder: (context, snapshot) {
                           switch (snapshot.connectionState) {
                             case ConnectionState.waiting:
                               return SizedBox(
-                                child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Card(
-                                      elevation: 0,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onBackground,
-                                      child: ListTile(
-                                        leading: const Icon(Icons.circle,
-                                            color: Colors.green, size: 30),
-                                        title: Text('',
-                                            style:
-                                                const TextStyle(fontSize: 17)),
-                                        subtitle: Text(
-                                          '',
-                                          style: const TextStyle(fontSize: 14),
-                                        ),
-                                      ),
-                                    )),
+                                height: 250,
+                                child: ChartBuilder(
+                                  appstate: appstate,
+                                  building: appstate.chartLoadingState,
+                                  maxSize: 100,
+                                  entrada: 1,
+                                  saida: 1,
+                                ),
                               );
                             case ConnectionState.done:
                               return SizedBox(
-                                child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: ListBuilder(
-                                      listSize: ls.length,
-                                      listValues: ls,
-                                    )),
+                                height: 250,
+                                child: ChartBuilder(
+                                  appstate: appstate,
+                                  building: appstate.chartLoadingState,
+                                  maxSize: 100,
+                                  entrada: chartObject['Entrada']!,
+                                  saida: chartObject['Saida']!,
+                                ),
                               );
                             default:
                               return Container();
@@ -417,9 +434,63 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
                         },
                       ),
                     );
-                  }),
-                ],
-              ),
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                  child: Divider(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    height: 1,
+                  ),
+                ),
+                Observer(builder: (_) {
+                  return Skeletonizer(
+                    enabled: appstate.listLoadingState,
+                    justifyMultiLineText: true,
+                    ignoreContainers: false,
+                    ignorePointers: true,
+                    child: FutureBuilder(
+                      future: _getListValues,
+                      builder: (context, snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return SizedBox(
+                              child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Card(
+                                    elevation: 0,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
+                                    child: const ListTile(
+                                      leading: Icon(Icons.circle,
+                                          color: Colors.green, size: 30),
+                                      title: Text('',
+                                          style: TextStyle(fontSize: 17)),
+                                      subtitle: Text(
+                                        '',
+                                        style: TextStyle(fontSize: 14),
+                                      ),
+                                    ),
+                                  )),
+                            );
+                          case ConnectionState.done:
+                            return SizedBox(
+                              child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ListBuilder(
+                                    listSize: ls.length,
+                                    listValues: ls,
+                                  )),
+                            );
+                          default:
+                            return Container();
+                        }
+                      },
+                    ),
+                  );
+                }),
+              ],
             ),
           )
         ]))
@@ -427,3 +498,43 @@ class _SliverAppBarAppState extends State<SliverAppBarApp> {
     );
   }
 }
+
+                // KeepAliveFutureBuilder(
+                //       future: _getListValues,
+                //       builder: (context, snapshot) {
+                //         switch (snapshot.connectionState) {
+                //           case ConnectionState.waiting:
+                //             return SizedBox(
+                //               child: Padding(
+                //                   padding: EdgeInsets.all(8.0),
+                //                   child: Card(
+                //                     elevation: 0,
+                //                     color: Theme.of(context)
+                //                         .colorScheme
+                //                         .onBackground,
+                //                     child: ListTile(
+                //                       leading: const Icon(Icons.circle,
+                //                           color: Colors.green, size: 30),
+                //                       title: Text('',
+                //                           style: const TextStyle(fontSize: 17)),
+                //                       subtitle: Text(
+                //                         '',
+                //                         style: const TextStyle(fontSize: 14),
+                //                       ),
+                //                     ),
+                //                   )),
+                //             );
+                //           case ConnectionState.done:
+                //             return SizedBox(
+                //               child: Padding(
+                //                   padding: EdgeInsets.all(8.0),
+                //                   child: ListBuilder(
+                //                     listSize: ls.length,
+                //                     listValues: ls,
+                //                   )),
+                //             );
+                //           default:
+                //             return Container();
+                //         }
+                //       },
+                //     )

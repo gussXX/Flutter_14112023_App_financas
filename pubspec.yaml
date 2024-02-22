@@ -43,6 +43,8 @@ dependencies:
   skeletonizer: ^1.0.1
   http: ^1.2.0
   masked_text_field: ^1.0.2
+  flutter_blurhash: ^0.8.2
+  glass: ^2.0.0+1
 
 dev_dependencies:
   mobx_codegen: ^2.1.1

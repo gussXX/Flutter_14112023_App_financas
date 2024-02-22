@@ -53,7 +53,7 @@ class BarBuilder {
           width: MediaQuery.of(context).size.width - 150,
           height: 150,
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            borderRadius: const BorderRadius.all(Radius.circular(5)),
             color: Theme.of(context).colorScheme.onBackground,
           ),
           child: Padding(

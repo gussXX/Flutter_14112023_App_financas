@@ -4,54 +4,43 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ListUpdate {
-  Future<List<dynamic>> listUpdate() async {
+  Future listUpdate({
+    required String id,
+    required String user,
+    required Map filter,
+  }) async {
+    //
     var client = http.Client();
-    //
-    // var url = 'localhost:9080';
-    // var ip = '10.0.2.2:9080';
-    //
     var note = '192.168.18.25:9080';
     var desk = '192.168.11.101:9080';
-    var route = 'mostrar_valores_de_um_mes';
+    var online = '10.0.2.2:9080';
+    var route = 'filtrar_list';
     //
-    Map<String, dynamic> body = {
-      "id": "64cfc4bcdd83f5737a40f71d",
-      "user": "Teste",
-      "years": 2024,
-      "mounth": "January"
-    };
-
-    var bodyJson = json.encode(body);
-    var request = Uri.http(note, route);
+    var request = Uri.http(desk, route);
     var header = {"Content-Type": "application/json"};
-    //
 
-    late List currentMounth;
+    print(filter);
 
     try {
+      //
       var response = await client.post(
         request,
-        body: bodyJson,
+        body: json.encode({
+          "id": id,
+          "user": user,
+          //
+          "startDate": filter['start'],
+          "finalDate": filter['final']
+        }),
         headers: header,
       );
-      var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as List;
-      for (var item in decodedResponse) {
-        // //print(item["currentMounth"][1]);
-        // print(currentMounth.length);
-        // print(currentMounth);
-        //
-        currentMounth = item["currentMounth"];
-      }
-      //ESPERADO: 200
+      return jsonDecode(response.body);
       //
-      return currentMounth;
     } catch (error) {
-      //ESPERADO: 200
       print('Ocorreu um erro: ${error}');
-      return [];
+      return;
     } finally {
       client.close();
     }
   }
-
 }

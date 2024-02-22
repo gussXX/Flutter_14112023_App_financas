@@ -83,8 +83,8 @@ class Rules {
     var endNumber = DateTime.parse(end);
     var endName = DateFormat('MMMM', 'pt_BR')
         .format(DateTime(DateTime.now().year, endNumber.month));
-    //
-    String response = '${startNumber.day} de $startName   •   ${endNumber.day} de $endName';
+    // •
+    String response = '${startNumber.day} de $startName   |   ${endNumber.day} de $endName';
     return response;
   }
 }

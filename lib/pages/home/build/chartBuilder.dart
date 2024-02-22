@@ -136,7 +136,7 @@ class _ChartBuilderState extends State<ChartBuilder> {
             barRods: [
               BarChartRodData(
                 width: 70,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(5),
                 toY: entrada != 0 ? rules.regraDeTres(entrada, saida,
                     maxSize, entrada) : 0,
                 color: Colors.green,
@@ -148,7 +148,7 @@ class _ChartBuilderState extends State<ChartBuilder> {
             barRods: [
               BarChartRodData(
                 width: 70,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(5),
                 toY: saida != 0 ? rules.regraDeTres(
                     entrada, saida, maxSize, saida) : 0,
                 color: Colors.red,

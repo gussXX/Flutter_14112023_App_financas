@@ -232,6 +232,22 @@ mixin _$AppState on AppStateBase, Store {
     });
   }
 
+  late final _$stateResponseInsertAtom =
+      Atom(name: 'AppStateBase.stateResponseInsert', context: context);
+
+  @override
+  bool get stateResponseInsert {
+    _$stateResponseInsertAtom.reportRead();
+    return super.stateResponseInsert;
+  }
+
+  @override
+  set stateResponseInsert(bool value) {
+    _$stateResponseInsertAtom.reportWrite(value, super.stateResponseInsert, () {
+      super.stateResponseInsert = value;
+    });
+  }
+
   late final _$AppStateBaseActionController =
       ActionController(name: 'AppStateBase', context: context);
 
@@ -346,6 +362,17 @@ mixin _$AppState on AppStateBase, Store {
   }
 
   @override
+  void changestateResponseInsert(bool value) {
+    final _$actionInfo = _$AppStateBaseActionController.startAction(
+        name: 'AppStateBase.changestateResponseInsert');
+    try {
+      return super.changestateResponseInsert(value);
+    } finally {
+      _$AppStateBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 value: ${value},
@@ -361,7 +388,8 @@ fontString: ${fontString},
 fontMonth: ${fontMonth},
 fontValue: ${fontValue},
 fontParc: ${fontParc},
-requestFilter: ${requestFilter}
+requestFilter: ${requestFilter},
+stateResponseInsert: ${stateResponseInsert}
     ''';
   }
 }

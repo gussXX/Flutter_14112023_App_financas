@@ -61,7 +61,9 @@ abstract class AppStateBase with Store {
         }
     }
   };
-  
+  @observable
+  bool stateResponseInsert = true;
+
   @action
   void increment() {
     value++;
@@ -112,4 +114,10 @@ abstract class AppStateBase with Store {
   void changeFontString(value){
     fontString = value;
   }
+
+  @action
+  void changestateResponseInsert(bool value){
+    stateResponseInsert = value;
+  }
+
 }
