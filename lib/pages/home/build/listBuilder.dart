@@ -79,14 +79,116 @@ class _ListBuilderState extends State<ListBuilder> {
                       useSafeArea: false,
                       context: context,
                       builder: (context) {
-                        return  SizedBox(
+                        return SizedBox(
                           width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            children: [
-                              Text('${listValues[index]['items']['_id'].toString()}'),
-                              Text('${listValues[index]['items']['tipe']['categories']}'),
-                              Text('${formatoMoeda.format(listValues[index]['items']['values']['value'])}'),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 20, 8, 20),
+                            child: Column(
+                              children: [
+                                Text(
+                                    '${listValues[index]['items']['_id'].toString()}',
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall),
+                                const SizedBox(
+                                  height: 60,
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(
+                                          '${listValues[index]['items']['tipe']['categories']}',
+                                          style: Theme.of(context).textTheme.displayLarge),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                        '${formatoMoeda.format(listValues[index]['items']['values']['value'])}',
+                                        style: Theme.of(context).textTheme.displayMedium),
+
+                                    listValues[index]['items']['tipe']['font'] == "entrada"
+                                        ? const Icon(Icons.arrow_downward_sharp,
+                                            color: Colors.green, size: 30)
+                                        : const Icon(Icons.arrow_upward_sharp,
+                                            color: Colors.red, size: 30),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 20, bottom: 20, top: 10),
+                                  child: Divider(
+                                    color:
+                                        Theme.of(context).colorScheme.tertiary,
+                                    height: 1,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 20),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4)),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 20, top: 20, bottom: 20),
+                                  child: Divider(
+                                    color:
+                                        Theme.of(context).colorScheme.tertiary,
+                                    height: 1,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      ElevatedButton(
+                                          style: const ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStatePropertyAll(
+                                                      Colors.green),
+                                              fixedSize:
+                                                  MaterialStatePropertyAll(
+                                                      Size(125, 25))),
+                                          onPressed: () {},
+                                          child: const Text(
+                                            'Editar',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          )),
+                                      ElevatedButton(
+                                          style: const ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStatePropertyAll(
+                                                      Colors.red),
+                                              fixedSize:
+                                                  MaterialStatePropertyAll(
+                                                      Size(125, 25))),
+                                          onPressed: () {},
+                                          child: const Text(
+                                            'Excluir',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          )),
+                                    ],
+                                  ),
+                                )
                               ],
+                            ),
                           ),
                         );
                       },

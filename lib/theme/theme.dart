@@ -5,50 +5,70 @@ class Tema {
     return ThemeData(
       useMaterial3: true,
       textTheme: const TextTheme(
-        //
-        bodySmall: TextStyle(
-            fontFamily: 'Didact',
-            color: Color(0xff004443),
-            fontStyle: FontStyle.normal,
-            fontWeight: FontWeight.normal,
-            fontSize: 10),
-        //
-        bodyMedium: TextStyle(
-            fontFamily: 'Didact',
-            color: Color(0xff325D55),
-            fontStyle: FontStyle.normal,
-            fontWeight: FontWeight.normal,
-            fontSize: 20),
-        //
-        bodyLarge: TextStyle(
-          fontFamily: 'Didact',
-          color: Colors.white,
-          fontStyle: FontStyle.normal,
-          fontSize: 30,
           //
-        ),
-        //
-        titleSmall: TextStyle(
-            fontFamily: 'Didact',
-            color: Color(0xff325D55),
-            fontStyle: FontStyle.normal,
-            fontWeight: FontWeight.normal,
-            fontSize: 10),
-        //
-        titleMedium: TextStyle(
-            fontFamily: 'Didact',
-            color: Color(0xff004443),
-            fontStyle: FontStyle.normal,
-            fontWeight: FontWeight.w400,
-            fontSize: 20),
-        //
-        titleLarge: TextStyle(
+          bodySmall: TextStyle(
+              fontFamily: 'Didact',
+              color: Color(0xff004443),
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.normal,
+              fontSize: 10),
+          //
+          bodyMedium: TextStyle(
+              fontFamily: 'Didact',
+              color: Color(0xff325D55),
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.normal,
+              fontSize: 20),
+          //
+          bodyLarge: TextStyle(
             fontFamily: 'Didact',
             color: Colors.white,
             fontStyle: FontStyle.normal,
-            fontWeight: FontWeight.bold,
-            fontSize: 14),
-      ),
+            fontSize: 30,
+            //
+          ),
+          //
+          titleSmall: TextStyle(
+              fontFamily: 'Didact',
+              color: Color(0xff325D55),
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.normal,
+              fontSize: 10),
+          //
+          titleMedium: TextStyle(
+              fontFamily: 'Didact',
+              color: Color(0xff004443),
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.w400,
+              fontSize: 20),
+          //
+          titleLarge: TextStyle(
+              fontFamily: 'Didact',
+              color: Colors.white,
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.bold,
+              fontSize: 30),
+          //
+          displaySmall: TextStyle(
+              fontFamily: 'Didact',
+              color: Colors.black,
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.bold,
+              fontSize: 10),
+          //
+          displayMedium: TextStyle(
+              fontFamily: 'Didact',
+              color: Colors.black,
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.bold,
+              fontSize: 20),
+          //
+          displayLarge: TextStyle(
+              fontFamily: 'Didact',
+              color: Colors.black,
+              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.bold,
+              fontSize: 40)),
       // ==========================================
       colorScheme: ColorScheme.fromSeed(
         seedColor: const Color(0xfff2f2f2),
@@ -77,50 +97,70 @@ class Tema {
     return ThemeData(
         useMaterial3: true,
         textTheme: const TextTheme(
-          //
-          bodySmall: TextStyle(
-              fontFamily: 'Didact',
-              color: Color(0xff39ff14),
-              fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.normal,
-              fontSize: 10),
-          //
-          bodyMedium: TextStyle(
-              fontFamily: 'Didact',
-              color: Color(0xff325D55),
-              fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.w300,
-              fontSize: 20),
-          //
-          bodyLarge: TextStyle(
-            fontFamily: 'Didact',
-            color: Colors.white,
-            fontStyle: FontStyle.normal,
-            fontSize: 30,
             //
-          ),
-          //
-          titleSmall: TextStyle(
-              fontFamily: 'Didact',
-              color: Color(0xff325D55),
-              fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.bold,
-              fontSize: 10),
-          //
-          titleMedium: TextStyle(
-              fontFamily: 'Didact',
-              color: Color(0xff39ff14),
-              fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.w400,
-              fontSize: 20),
-          //
-          titleLarge: TextStyle(
+            bodySmall: TextStyle(
+                fontFamily: 'Didact',
+                color: Color(0xff39ff14),
+                fontStyle: FontStyle.normal,
+                fontWeight: FontWeight.normal,
+                fontSize: 10),
+            //
+            bodyMedium: TextStyle(
+                fontFamily: 'Didact',
+                color: Color(0xff325D55),
+                fontStyle: FontStyle.normal,
+                fontWeight: FontWeight.w300,
+                fontSize: 20),
+            //
+            bodyLarge: TextStyle(
               fontFamily: 'Didact',
               color: Colors.white,
               fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.bold,
-              fontSize: 14),
-        ),
+              fontSize: 30,
+              //
+            ),
+            //
+            titleSmall: TextStyle(
+                fontFamily: 'Didact',
+                color: Color(0xff325D55),
+                fontStyle: FontStyle.normal,
+                fontWeight: FontWeight.bold,
+                fontSize: 10),
+            //
+            titleMedium: TextStyle(
+                fontFamily: 'Didact',
+                color: Color(0xff39ff14),
+                fontStyle: FontStyle.normal,
+                fontWeight: FontWeight.w400,
+                fontSize: 20),
+            //
+            titleLarge: TextStyle(
+                fontFamily: 'Didact',
+                color: Colors.white,
+                fontStyle: FontStyle.normal,
+                fontWeight: FontWeight.bold,
+                fontSize: 30),
+            //
+            displaySmall: TextStyle(
+                fontFamily: 'Didact',
+                color: Colors.white,
+                fontStyle: FontStyle.normal,
+                fontWeight: FontWeight.bold,
+                fontSize: 10),
+            //
+            displayMedium: TextStyle(
+                fontFamily: 'Didact',
+                color: Colors.white,
+                fontStyle: FontStyle.normal,
+                fontWeight: FontWeight.bold,
+                fontSize: 20),
+            //
+            displayLarge: TextStyle(
+                fontFamily: 'Didact',
+                color: Colors.white,
+                fontStyle: FontStyle.normal,
+                fontWeight: FontWeight.bold,
+                fontSize: 40)),
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xfff2f2f2),
           brightness: Brightness.dark,
@@ -144,7 +184,6 @@ class Tema {
   }
 }
 
-
 /// BACKUPS DE CORES
-/// 
+///
 /// primary: const Color(0xff325D55),
