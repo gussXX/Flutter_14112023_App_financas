@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_brace_in_string_interps, avoid_print, file_names, unnecessary_string_interpolations, prefer_interpolation_to_compose_strings
 
+import 'package:financas/pages/home/rules/deleteUpdate.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -23,6 +24,7 @@ ScrollController listScrollController = ScrollController();
 bool controllerDismiss = false;
 
 class _ListBuilderState extends State<ListBuilder> {
+  final deleteUpdate = DeleteUpdate();
   //
   @override
   void initState() {
@@ -100,7 +102,9 @@ class _ListBuilderState extends State<ListBuilder> {
                                       fit: BoxFit.scaleDown,
                                       child: Text(
                                           '${listValues[index]['items']['tipe']['categories']}',
-                                          style: Theme.of(context).textTheme.displayLarge),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .displayLarge),
                                     ),
                                   ],
                                 ),
@@ -110,9 +114,12 @@ class _ListBuilderState extends State<ListBuilder> {
                                   children: [
                                     Text(
                                         '${formatoMoeda.format(listValues[index]['items']['values']['value'])}',
-                                        style: Theme.of(context).textTheme.displayMedium),
-
-                                    listValues[index]['items']['tipe']['font'] == "entrada"
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .displayMedium),
+                                    listValues[index]['items']['tipe']
+                                                ['font'] ==
+                                            "entrada"
                                         ? const Icon(Icons.arrow_downward_sharp,
                                             color: Colors.green, size: 30)
                                         : const Icon(Icons.arrow_upward_sharp,
@@ -164,7 +171,7 @@ class _ListBuilderState extends State<ListBuilder> {
                                               fixedSize:
                                                   MaterialStatePropertyAll(
                                                       Size(125, 25))),
-                                          onPressed: () {},
+                                          onPressed: (){},
                                           child: const Text(
                                             'Editar',
                                             style:
@@ -178,7 +185,28 @@ class _ListBuilderState extends State<ListBuilder> {
                                               fixedSize:
                                                   MaterialStatePropertyAll(
                                                       Size(125, 25))),
-                                          onPressed: () {},
+                                          onPressed: () async {
+                                            final String id = listValues[index]['items']['_id'].toString();
+                                            final int year = DateTime.parse(listValues[index]['items']['date']).year;
+                                            final String monthName = DateFormat('MMMM').format(DateTime.parse(listValues[index]['items']['date']));
+
+                                            print([id, year, monthName]);
+
+                                           final result = await deleteUpdate.deleteUpdate(deleteQuery: {
+                                              "user": "Teste",
+                                              "id": "65f8fe787112651c87dca4b9",
+
+                                              'filter': id,
+                                              "years": year,
+                                              "mounth": monthName
+                                            });
+
+                                            if (result) {
+                                              
+                                            } else {
+                                              
+                                            }
+                                          },
                                           child: const Text(
                                             'Excluir',
                                             style:
